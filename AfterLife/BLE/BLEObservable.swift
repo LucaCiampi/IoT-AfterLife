@@ -81,12 +81,24 @@ class BLEObservable: ObservableObject {
     }
     
     /**
-     Connects the the ESP32 managing the interaction 3 which is the sphero bolt in a cuve
+     Connects the the bluetooth peripheral with specified name
      */
     func connectToPeriphWithName(name: String) {
         BLEManager.instance.scan { p, pname in
             let periph = Periph(blePeriph: p, name: pname)
             if periph.name == name {
+                self.connectTo(p: periph)
+            }
+        }
+    }
+    
+    /**
+     Connects the the bluetooth peripheral with specified UUID
+     */
+    func connectToPeriphWithUUID(uuid: String) {
+        BLEManager.instance.scan { p, pname in
+            let periph = Periph(blePeriph: p, name: pname)
+            if periph.blePeriph.identifier == UUID(uuidString: uuid) {
                 self.connectTo(p: periph)
             }
         }

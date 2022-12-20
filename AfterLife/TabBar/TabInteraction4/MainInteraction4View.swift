@@ -14,33 +14,44 @@ struct MainInteraction4View: View {
     @State var scanButtonString = "Start scan"
     @State var isScanningDevices = false
     @State var isShowingDetailView = false
+    @State var batFlyingStatus = ""
     
     var esp32Interaction4Name = "rfid-luca"
     
     var body: some View {
         VStack {
-            Text(connectionString)
-            
-            if bleInterface.connectedPeripheral != nil {
-                Button("Disconnect") {
-                    bleInterface.disconnectFrom(p: bleInterface.connectedPeripheral!)
+            VStack {
+                Text(connectionString)
+                
+                if bleInterface.connectedPeripheral != nil {
+                    Button("Disconnect") {
+                        bleInterface.disconnectFrom(p: bleInterface.connectedPeripheral!)
+                    }
                 }
-            }
-            if (!isShowingDetailView) {
-                HStack {
-                    Button(scanButtonString) {
-                        isScanningDevices = !isScanningDevices
-                        if (isScanningDevices) {
-                            scanButtonString = "Stop scan"
-                            bleInterface.connectToPeriphWithName(name: esp32Interaction4Name)
-                        }
-                        else {
-                            scanButtonString = "Start scan"
-                            bleInterface.stopScan()
+            }.padding()
+            VStack {
+                if (!isShowingDetailView) {
+                    HStack {
+                        Button(scanButtonString) {
+                            isScanningDevices = !isScanningDevices
+                            if (isScanningDevices) {
+                                scanButtonString = "Stop scan"
+                                bleInterface.connectToPeriphWithName(name: esp32Interaction4Name)
+                            }
+                            else {
+                                scanButtonString = "Start scan"
+                                bleInterface.stopScan()
+                            }
                         }
                     }
                 }
-            }
+                else {
+                    Button("Make bat fly away") {
+                        makeDJIFly()
+                    }
+                    Text(batFlyingStatus)
+                }
+            }.padding()
         }.onChange(of: bleInterface.connectionState, perform: { newValue in
             switch newValue {
                 
@@ -67,6 +78,10 @@ struct MainInteraction4View: View {
             }
         })
         .padding()
+    }
+    
+    func makeDJIFly() {
+        batFlyingStatus = "Bat is flying now"
     }
 }
 
