@@ -20,7 +20,7 @@ class BLEObservable: ObservableObject {
     @Published var points: [LineChartDataPoint] = []
     @Published var hasLessThanHundredPoints: Bool = true
     //@Published var cities: [CityListElement] = []
-    @Published var history: [HistoryListElement] = []
+    //@Published var history: [HistoryListElement] = []
     
     enum ConnectionState {
         case disconnected, connecting, discovering, ready
