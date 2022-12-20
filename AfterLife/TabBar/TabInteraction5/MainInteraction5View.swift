@@ -38,17 +38,18 @@ struct MainInteraction5View: View {
                     Text("Détails manipulation ici")
                 }
             }
-            
-            HStack {
-                Button(scanButtonString) {
-                    isScanningDevices = !isScanningDevices
-                    if (isScanningDevices) {
-                        scanButtonString = "Stop scan"
-                        bleInterface.startScan()
-                    }
-                    else {
-                        scanButtonString = "Start scan"
-                        bleInterface.stopScan()
+            else {
+                HStack {
+                    Button(scanButtonString) {
+                        isScanningDevices = !isScanningDevices
+                        if (isScanningDevices) {
+                            scanButtonString = "Stop scan"
+                            bleInterface.startScan()
+                        }
+                        else {
+                            scanButtonString = "Start scan"
+                            bleInterface.stopScan()
+                        }
                     }
                 }
             }

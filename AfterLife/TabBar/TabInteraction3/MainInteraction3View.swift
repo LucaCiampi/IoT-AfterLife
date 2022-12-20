@@ -15,42 +15,66 @@ struct MainInteraction3View: View {
     @State var scanButtonString = "Start scan"
     @State var isScanningDevices = false
     @State var isShowingDetailView = false
+    @State var spheroConnectionString = "No sphero connected"
+    @State var isConnectedToSphero = false
     
     var esp32Interaction3Name = "rfid-luca"
+    var spheroInteraction2Name = "SB-5D1C"
+    
+    @State var currentHeading: Double = 0
     
     var body: some View {
-        VStack {            
-            Text(connectionString)
-            
-            if bleInterface.connectedPeripheral != nil {
-                Button("Disconnect") {
-                    bleInterface.disconnectFrom(p: bleInterface.connectedPeripheral!)
+        VStack {
+            HStack {
+                VStack {
+                    Text(connectionString)
+                    
+                    if bleInterface.connectedPeripheral != nil {
+                        Button("Disconnect") {
+                            bleInterface.disconnectFrom(p: bleInterface.connectedPeripheral!)
+                        }
+                    }
+                    
+                    List(bleInterface.periphList.reversed().filter({ $0.name == esp32Interaction3Name })) { p in
+                        (SinglePeripheralView(periphName: p.name)).onAppear {
+                            bleInterface.connectTo(p: p)
+                        }
+                    }
+                    if (!isShowingDetailView) {
+                        HStack {
+                            Button(scanButtonString) {
+                                isScanningDevices = !isScanningDevices
+                                if (isScanningDevices) {
+                                    scanButtonString = "Stop scan"
+                                    bleInterface.startScan()
+                                }
+                                else {
+                                    scanButtonString = "Start scan"
+                                    bleInterface.stopScan()
+                                }
+                            }
+                        }
+                    }
                 }
-            }
-            
-            List(bleInterface.periphList.reversed().filter({ $0.name == esp32Interaction3Name })) { p in
-                SinglePeripheralView(periphName: p.name).onTapGesture {
-                    bleInterface.connectTo(p: p)
+                VStack {
+                    Text(spheroConnectionString)
+                    Button("Connect to sphero " + spheroInteraction2Name) {
+                        SharedToyBox.instance.searchForBoltsNamed([spheroInteraction2Name]) { err in
+                            if err == nil {
+                                self.spheroConnectionString = "Connected to " + spheroInteraction2Name
+                                isConnectedToSphero = true
+                                ActivateSpheroSensors()
+                            }
+                        }
+                    }
                 }
             }
             
             if (isShowingDetailView) {
                 VStack {
                     Text("Détails manipulation ici")
-                }
-            }
-            
-            HStack {
-                Button(scanButtonString) {
-                    isScanningDevices = !isScanningDevices
-                    if (isScanningDevices) {
-                        scanButtonString = "Stop scan"
-                        bleInterface.startScan()
-                    }
-                    else {
-                        scanButtonString = "Start scan"
-                        bleInterface.stopScan()
-                    }
+                }.onChange(of: isConnectedToSphero) { newValue in
+                    MakeSpheroSpin()
                 }
             }
         }.onChange(of: bleInterface.connectedPeripheral, perform: { newValue in
@@ -79,6 +103,26 @@ struct MainInteraction3View: View {
             }
         })
         .padding()
+    }
+    
+    /**
+     Init parameters before moving the sphero bolt
+     */
+    func ActivateSpheroSensors() {
+        SharedToyBox.instance.bolt?.sensorControl.enable(sensors: SensorMask.init(arrayLiteral: .accelerometer))
+        SharedToyBox.instance.bolt?.sensorControl.interval = 1
+        SharedToyBox.instance.bolt?.setStabilization(state: SetStabilization.State.off)
+    }
+    
+    /**
+     Makes the sphero bolt rotate when placed in the pot
+     */
+    func MakeSpheroSpin() {
+        Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { _ in
+            currentHeading += 180.0
+            SharedToyBox.instance.bolt?.roll(heading: currentHeading, speed: 10)
+            print("MakeSpheroSpin")
+        })
     }
 }
 
