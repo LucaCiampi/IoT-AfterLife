@@ -81,6 +81,18 @@ class BLEObservable: ObservableObject {
     }
     
     /**
+     Connects the the ESP32 managing the interaction 3 which is the sphero bolt in a cuve
+     */
+    func connectToPeriphWithName(name: String) {
+        BLEManager.instance.scan { p, pname in
+            let periph = Periph(blePeriph: p, name: pname)
+            if periph.name == name {
+                self.connectTo(p: periph)
+            }
+        }
+    }
+    
+    /**
      Listens for messages on the "readAccelerometerCBUUID" constant
      */
     func listenForAccelerometer() {
@@ -101,21 +113,16 @@ class BLEObservable: ObservableObject {
     }
     
     /**
-     Listens for messages on the "readCitiesCBUUID" constant
+     Connects the the ESP32 managing the interaction 3 which is the sphero bolt in a cuve
      */
-    /*func listenForCities() {
-        BLEManager.instance.listenForCities { data in
-            if let message = String(bytes: data!, encoding: .utf8) {
-                print("city : " + message)
-                
-                self.appendToHistory(text: message)
-                    self.appendCity(name: message)
-            }
-            else {
-                print("ERROR : could not read city data (wrong encoding, need utf-8)")
+    func connectToInteraction3Esp32() {
+        BLEManager.instance.scan { p, pname in
+            var periph = Periph(blePeriph: p, name: pname)
+            if periph.name == "rfid-luca" {
+                self.connectTo(p: periph)
             }
         }
-    }*/
+    }
     
     /**
      Sends a message to "writeCBUUID" constant

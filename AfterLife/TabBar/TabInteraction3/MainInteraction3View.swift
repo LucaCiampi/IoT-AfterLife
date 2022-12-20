@@ -34,19 +34,13 @@ struct MainInteraction3View: View {
                             bleInterface.disconnectFrom(p: bleInterface.connectedPeripheral!)
                         }
                     }
-                    
-                    List(bleInterface.periphList.reversed().filter({ $0.name == esp32Interaction3Name })) { p in
-                        (SinglePeripheralView(periphName: p.name)).onAppear {
-                            bleInterface.connectTo(p: p)
-                        }
-                    }
                     if (!isShowingDetailView) {
                         HStack {
                             Button(scanButtonString) {
                                 isScanningDevices = !isScanningDevices
                                 if (isScanningDevices) {
                                     scanButtonString = "Stop scan"
-                                    bleInterface.startScan()
+                                    bleInterface.connectToPeriphWithName(name: esp32Interaction3Name)
                                 }
                                 else {
                                     scanButtonString = "Start scan"
@@ -55,7 +49,31 @@ struct MainInteraction3View: View {
                             }
                         }
                     }
-                }
+                }.onChange(of: bleInterface.connectionState, perform: { newValue in
+                    switch newValue {
+                        
+                    case .disconnected:
+                        isShowingDetailView = false
+                        break
+                    case .connecting:
+                        connectionString = "Connecting... "
+                        break
+                    case .discovering:
+                        connectionString = "Discovering... "
+                        break
+                    case .ready:
+                        connectionString = "Connected to " + connectionString
+                        isShowingDetailView = true
+                        break
+                    }
+                }).onChange(of: bleInterface.connectedPeripheral, perform: { newValue in
+                    if let p = newValue {
+                        connectionString = p.name
+                    }
+                    else {
+                        connectionString = "No ESP32 connected"
+                    }
+                })
                 VStack {
                     Text(spheroConnectionString)
                     Button("Connect to sphero " + spheroInteraction2Name) {
@@ -68,40 +86,16 @@ struct MainInteraction3View: View {
                         }
                     }
                 }
-            }
+            }.padding()
             
             if (isShowingDetailView) {
                 VStack {
-                    Text("Détails manipulation ici")
+                    Text("currentHeading : " + String(format: "%.1f", currentHeading))
                 }.onChange(of: isConnectedToSphero) { newValue in
                     MakeSpheroSpin()
-                }
+                }.padding()
             }
-        }.onChange(of: bleInterface.connectedPeripheral, perform: { newValue in
-            if let p = newValue {
-                connectionString = p.name
-            }
-            else {
-                connectionString = "No ESP32 connected"
-            }
-        }).onChange(of: bleInterface.connectionState, perform: { newValue in
-            switch newValue {
-                
-            case .disconnected:
-                isShowingDetailView = false
-                break
-            case .connecting:
-                connectionString = "Connecting... "
-                break
-            case .discovering:
-                connectionString = "Discovering... "
-                break
-            case .ready:
-                connectionString = "Connected to " + connectionString
-                isShowingDetailView = true
-                break
-            }
-        })
+        }
         .padding()
     }
     
