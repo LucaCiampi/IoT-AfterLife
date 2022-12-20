@@ -14,53 +14,45 @@ struct MainInteraction5View: View {
     @State var scanButtonString = "Start scan"
     @State var isScanningDevices = false
     @State var isShowingDetailView = false
+    @State var pokerSoundStatus = ""
     
-    var esp32Interaction3Name = "rfid-luca"
+    var esp32Interaction5Name = "rfid-luca"
     
     var body: some View {
         VStack {
-            Text(connectionString)
-            
-            if bleInterface.connectedPeripheral != nil {
-                Button("Disconnect") {
-                    bleInterface.disconnectFrom(p: bleInterface.connectedPeripheral!)
+            VStack {
+                Text(connectionString)
+                
+                if bleInterface.connectedPeripheral != nil {
+                    Button("Disconnect") {
+                        bleInterface.disconnectFrom(p: bleInterface.connectedPeripheral!)
+                    }
                 }
-            }
-            
-            List(bleInterface.periphList.reversed().filter({ $0.name == esp32Interaction3Name })) { p in
-                SinglePeripheralView(periphName: p.name).onTapGesture {
-                    bleInterface.connectTo(p: p)
-                }
-            }
-            
-            if (isShowingDetailView) {
-                VStack {
-                    Text("Détails manipulation ici")
-                }
-            }
-            else {
-                HStack {
-                    Button(scanButtonString) {
-                        isScanningDevices = !isScanningDevices
-                        if (isScanningDevices) {
-                            scanButtonString = "Stop scan"
-                            bleInterface.startScan()
-                        }
-                        else {
-                            scanButtonString = "Start scan"
-                            bleInterface.stopScan()
+            }.padding()
+            VStack {
+                if (!isShowingDetailView) {
+                    HStack {
+                        Button(scanButtonString) {
+                            isScanningDevices = !isScanningDevices
+                            if (isScanningDevices) {
+                                scanButtonString = "Stop scan"
+                                bleInterface.connectToPeriphWithName(name: esp32Interaction5Name)
+                            }
+                            else {
+                                scanButtonString = "Start scan"
+                                bleInterface.stopScan()
+                            }
                         }
                     }
                 }
-            }
-        }.onChange(of: bleInterface.connectedPeripheral, perform: { newValue in
-            if let p = newValue {
-                connectionString = p.name
-            }
-            else {
-                connectionString = "No ESP32 connected"
-            }
-        }).onChange(of: bleInterface.connectionState, perform: { newValue in
+                else {
+                    Button("Make poker game sound") {
+                        makePokerGameSound()
+                    }
+                    Text(pokerSoundStatus)
+                }
+            }.padding()
+        }.onChange(of: bleInterface.connectionState, perform: { newValue in
             switch newValue {
                 
             case .disconnected:
@@ -77,8 +69,19 @@ struct MainInteraction5View: View {
                 isShowingDetailView = true
                 break
             }
+        }).onChange(of: bleInterface.connectedPeripheral, perform: { newValue in
+            if let p = newValue {
+                connectionString = p.name
+            }
+            else {
+                connectionString = "No ESP32 connected"
+            }
         })
         .padding()
+    }
+    
+    func makePokerGameSound() {
+        pokerSoundStatus = "sound started"
     }
 }
 
