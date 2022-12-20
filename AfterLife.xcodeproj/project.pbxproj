@@ -50,6 +50,7 @@
 		B0D073D82951F2D10036B338 /* CommandV1.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D073A92951F2D00036B338 /* CommandV1.swift */; };
 		B0D073D92951F2D10036B338 /* Double+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D073AA2951F2D00036B338 /* Double+Utils.swift */; };
 		B0D073DA2951F2D10036B338 /* String+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D073AB2951F2D00036B338 /* String+Utils.swift */; };
+		B0D073E2295224B40036B338 /* giant_bell.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B0D073E1295224B40036B338 /* giant_bell.mp3 */; };
 		B0EE0915291A469F00828D11 /* AfterLifeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0EE0914291A469F00828D11 /* AfterLifeApp.swift */; };
 		B0EE0917291A469F00828D11 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0EE0916291A469F00828D11 /* ContentView.swift */; };
 		B0EE0919291A46A000828D11 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B0EE0918291A46A000828D11 /* Assets.xcassets */; };
@@ -258,6 +259,7 @@
 		B0D073A92951F2D00036B338 /* CommandV1.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommandV1.swift; sourceTree = "<group>"; };
 		B0D073AA2951F2D00036B338 /* Double+Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Double+Utils.swift"; sourceTree = "<group>"; };
 		B0D073AB2951F2D00036B338 /* String+Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Utils.swift"; sourceTree = "<group>"; };
+		B0D073E1295224B40036B338 /* giant_bell.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = giant_bell.mp3; sourceTree = "<group>"; };
 		B0EE0911291A469F00828D11 /* AfterLife.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AfterLife.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B0EE0914291A469F00828D11 /* AfterLifeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AfterLifeApp.swift; sourceTree = "<group>"; };
 		B0EE0916291A469F00828D11 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -600,6 +602,14 @@
 			path = CommandV1;
 			sourceTree = "<group>";
 		};
+		B0D073E0295224AA0036B338 /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				B0D073E1295224B40036B338 /* giant_bell.mp3 */,
+			);
+			path = Sounds;
+			sourceTree = "<group>";
+		};
 		B0EE0908291A469F00828D11 = {
 			isa = PBXGroup;
 			children = (
@@ -623,6 +633,7 @@
 		B0EE0913291A469F00828D11 /* AfterLife */ = {
 			isa = PBXGroup;
 			children = (
+				B0D073E0295224AA0036B338 /* Sounds */,
 				B0D073762951F2D00036B338 /* SpheroStarter */,
 				B0F4516D291A9DD800CFB224 /* BLE */,
 				B0EE0963291A4B9B00828D11 /* SwiftUICharts */,
@@ -1360,6 +1371,7 @@
 			files = (
 				B0EE091C291A46A000828D11 /* Preview Assets.xcassets in Resources */,
 				B0EE0919291A46A000828D11 /* Assets.xcassets in Resources */,
+				B0D073E2295224B40036B338 /* giant_bell.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1742,7 +1754,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.luca.SwiftUI-FullApp";
+				PRODUCT_BUNDLE_IDENTIFIER = test.luca.BLETAMERE;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -1775,7 +1787,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.luca.SwiftUI-FullApp";
+				PRODUCT_BUNDLE_IDENTIFIER = test.luca.BLETAMERE;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

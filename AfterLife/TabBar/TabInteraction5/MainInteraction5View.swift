@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AVFoundation
 
 struct MainInteraction5View: View {
     @EnvironmentObject var bleInterface: BLEObservable
@@ -17,6 +18,7 @@ struct MainInteraction5View: View {
     @State var pokerSoundStatus = ""
     
     var esp32Interaction5Name = "rfid-luca"
+    @State var player: AVAudioPlayer?
     
     var body: some View {
         VStack {
@@ -48,6 +50,7 @@ struct MainInteraction5View: View {
                 else {
                     Button("Make poker game sound") {
                         makePokerGameSound()
+                        pokerSoundStatus = "just played"
                     }
                     Text(pokerSoundStatus)
                 }
@@ -81,7 +84,26 @@ struct MainInteraction5View: View {
     }
     
     func makePokerGameSound() {
-        pokerSoundStatus = "sound started"
+        guard let url = Bundle.main.url(forResource: "giant_bell", withExtension: "mp3") else { return print("giant_bell sound not found") }
+
+        do {
+            try AVAudioSession.sharedInstance().setCategory(.soloAmbient, mode: .default)
+            try AVAudioSession.sharedInstance().setActive(true)
+
+            /* The following line is required for the player to work on iOS 11. Change the file type accordingly*/
+            player = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileType.mp3.rawValue)
+
+            /* iOS 10 and earlier require the following line:
+            player = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileTypeMPEGLayer3) */
+
+            guard let player = player else { return }
+
+            player.play()
+            print("giant_bell just played")
+
+        } catch let error {
+            print(error.localizedDescription)
+        }
     }
 }
 
