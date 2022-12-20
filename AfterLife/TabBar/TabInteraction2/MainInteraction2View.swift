@@ -16,11 +16,22 @@ struct MainInteraction2View: View {
     
     @EnvironmentObject var bleInterface: BLEObservable
     
+    @State var connectionString = "No device connected"
+    @State var scanButtonString = "Start scan"
+    @State var isScanningDevices = false
+    @State var isShowingDetailView = false
+    
+    var spheroInteraction2Name = "SB-5D1C"
+    
     var body: some View {
         VStack {
-            Text("Historique")
-            List(bleInterface.history.reversed()) { historyElement in
-                SingleHistoryView(name: historyElement.text)
+            Text(connectionString)
+            Button("Connexion sphero") {
+                SharedToyBox.instance.searchForBoltsNamed([spheroInteraction2Name]) { err in
+                    if err == nil {
+                        self.connectionString = "Connected to " + spheroInteraction2Name
+                    }
+                }
             }
         }
         .padding()

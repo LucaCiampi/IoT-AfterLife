@@ -8,9 +8,48 @@
 
 /* Begin PBXBuildFile section */
 		B0356136291A5B9800EEA0F3 /* MainInteraction2View.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0356135291A5B9800EEA0F3 /* MainInteraction2View.swift */; };
-		B035613A291A87BD00EEA0F3 /* SingleHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0356139291A87BD00EEA0F3 /* SingleHistoryView.swift */; };
 		B082BAED2951E1DF00FB9701 /* MainInteraction4View.swift in Sources */ = {isa = PBXBuildFile; fileRef = B082BAEC2951E1DF00FB9701 /* MainInteraction4View.swift */; };
 		B082BAEF2951E1EB00FB9701 /* MainInteraction5View.swift in Sources */ = {isa = PBXBuildFile; fileRef = B082BAEE2951E1EB00FB9701 /* MainInteraction5View.swift */; };
+		B0D073B32951F2D10036B338 /* GraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D073792951F2D00036B338 /* GraphView.swift */; };
+		B0D073B42951F2D10036B338 /* CGContext+GraphLines.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D0737A2951F2D00036B338 /* CGContext+GraphLines.swift */; };
+		B0D073B52951F2D10036B338 /* GraphSegment.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D0737B2951F2D00036B338 /* GraphSegment.swift */; };
+		B0D073B62951F2D10036B338 /* SpheroStatusViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D0737C2951F2D00036B338 /* SpheroStatusViewController.swift */; };
+		B0D073B72951F2D10036B338 /* SharedToyBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D0737E2951F2D00036B338 /* SharedToyBox.swift */; };
+		B0D073B82951F2D10036B338 /* SDKUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D073802951F2D00036B338 /* SDKUtils.swift */; };
+		B0D073B92951F2D10036B338 /* Toy.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D073832951F2D00036B338 /* Toy.swift */; };
+		B0D073BA2951F2D10036B338 /* SensorControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D073842951F2D00036B338 /* SensorControl.swift */; };
+		B0D073BB2951F2D10036B338 /* SPRKToy.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D073862951F2D00036B338 /* SPRKToy.swift */; };
+		B0D073BC2951F2D10036B338 /* SensorControlV1.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D073872951F2D00036B338 /* SensorControlV1.swift */; };
+		B0D073BD2951F2D10036B338 /* SpheroV1Toy.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D073882951F2D00036B338 /* SpheroV1Toy.swift */; };
+		B0D073BE2951F2D10036B338 /* SpheroV1ToyCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D073892951F2D00036B338 /* SpheroV1ToyCore.swift */; };
+		B0D073BF2951F2D10036B338 /* BB8Toy.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D0738A2951F2D00036B338 /* BB8Toy.swift */; };
+		B0D073C02951F2D10036B338 /* SensorControlV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D0738C2951F2D00036B338 /* SensorControlV2.swift */; };
+		B0D073C12951F2D10036B338 /* BB9EToy.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D0738D2951F2D00036B338 /* BB9EToy.swift */; };
+		B0D073C22951F2D10036B338 /* SpheroV2Toy.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D0738E2951F2D00036B338 /* SpheroV2Toy.swift */; };
+		B0D073C32951F2D10036B338 /* BoltToy.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D0738F2951F2D00036B338 /* BoltToy.swift */; };
+		B0D073C42951F2D10036B338 /* R2D2Toy.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D073902951F2D00036B338 /* R2D2Toy.swift */; };
+		B0D073C52951F2D10036B338 /* SpheroV2ToyCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D073912951F2D00036B338 /* SpheroV2ToyCore.swift */; };
+		B0D073C62951F2D10036B338 /* MiniToy.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D073922951F2D00036B338 /* MiniToy.swift */; };
+		B0D073C72951F2D10036B338 /* ToyProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D073932951F2D00036B338 /* ToyProtocols.swift */; };
+		B0D073C82951F2D10036B338 /* CBUUID+SpheroUUIDs.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D073942951F2D00036B338 /* CBUUID+SpheroUUIDs.swift */; };
+		B0D073C92951F2D10036B338 /* ToyBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D073962951F2D00036B338 /* ToyBox.swift */; };
+		B0D073CA2951F2D10036B338 /* Color+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D073972951F2D00036B338 /* Color+Utils.swift */; };
+		B0D073CB2951F2D10036B338 /* SensorUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D073992951F2D00036B338 /* SensorUtils.swift */; };
+		B0D073CC2951F2D10036B338 /* CommandOperationV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D0739B2951F2D00036B338 /* CommandOperationV2.swift */; };
+		B0D073CD2951F2D10036B338 /* CommandSequencerV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D0739C2951F2D00036B338 /* CommandSequencerV2.swift */; };
+		B0D073CE2951F2D10036B338 /* CommandV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D0739D2951F2D00036B338 /* CommandV2.swift */; };
+		B0D073CF2951F2D10036B338 /* VersionsCommandResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D0739F2951F2D00036B338 /* VersionsCommandResponse.swift */; };
+		B0D073D02951F2D10036B338 /* ShouldActionCompleteResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D073A02951F2D00036B338 /* ShouldActionCompleteResponse.swift */; };
+		B0D073D12951F2D10036B338 /* SensorCommandResponseV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D073A12951F2D00036B338 /* SensorCommandResponseV2.swift */; };
+		B0D073D22951F2D10036B338 /* SensorCommandResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D073A22951F2D00036B338 /* SensorCommandResponse.swift */; };
+		B0D073D32951F2D10036B338 /* SensorMaskCommandResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D073A32951F2D00036B338 /* SensorMaskCommandResponse.swift */; };
+		B0D073D42951F2D10036B338 /* PowerStateResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D073A42951F2D00036B338 /* PowerStateResponse.swift */; };
+		B0D073D52951F2D10036B338 /* CollisionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D073A52951F2D00036B338 /* CollisionData.swift */; };
+		B0D073D62951F2D10036B338 /* CommandV1Operation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D073A72951F2D00036B338 /* CommandV1Operation.swift */; };
+		B0D073D72951F2D10036B338 /* CommandV1Sequencer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D073A82951F2D00036B338 /* CommandV1Sequencer.swift */; };
+		B0D073D82951F2D10036B338 /* CommandV1.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D073A92951F2D00036B338 /* CommandV1.swift */; };
+		B0D073D92951F2D10036B338 /* Double+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D073AA2951F2D00036B338 /* Double+Utils.swift */; };
+		B0D073DA2951F2D10036B338 /* String+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D073AB2951F2D00036B338 /* String+Utils.swift */; };
 		B0EE0915291A469F00828D11 /* AfterLifeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0EE0914291A469F00828D11 /* AfterLifeApp.swift */; };
 		B0EE0917291A469F00828D11 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0EE0916291A469F00828D11 /* ContentView.swift */; };
 		B0EE0919291A46A000828D11 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B0EE0918291A46A000828D11 /* Assets.xcassets */; };
@@ -177,9 +216,48 @@
 
 /* Begin PBXFileReference section */
 		B0356135291A5B9800EEA0F3 /* MainInteraction2View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainInteraction2View.swift; sourceTree = "<group>"; };
-		B0356139291A87BD00EEA0F3 /* SingleHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleHistoryView.swift; sourceTree = "<group>"; };
 		B082BAEC2951E1DF00FB9701 /* MainInteraction4View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainInteraction4View.swift; sourceTree = "<group>"; };
 		B082BAEE2951E1EB00FB9701 /* MainInteraction5View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainInteraction5View.swift; sourceTree = "<group>"; };
+		B0D073792951F2D00036B338 /* GraphView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphView.swift; sourceTree = "<group>"; };
+		B0D0737A2951F2D00036B338 /* CGContext+GraphLines.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGContext+GraphLines.swift"; sourceTree = "<group>"; };
+		B0D0737B2951F2D00036B338 /* GraphSegment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphSegment.swift; sourceTree = "<group>"; };
+		B0D0737C2951F2D00036B338 /* SpheroStatusViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpheroStatusViewController.swift; sourceTree = "<group>"; };
+		B0D0737E2951F2D00036B338 /* SharedToyBox.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedToyBox.swift; sourceTree = "<group>"; };
+		B0D073802951F2D00036B338 /* SDKUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SDKUtils.swift; sourceTree = "<group>"; };
+		B0D073832951F2D00036B338 /* Toy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Toy.swift; sourceTree = "<group>"; };
+		B0D073842951F2D00036B338 /* SensorControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SensorControl.swift; sourceTree = "<group>"; };
+		B0D073862951F2D00036B338 /* SPRKToy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPRKToy.swift; sourceTree = "<group>"; };
+		B0D073872951F2D00036B338 /* SensorControlV1.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SensorControlV1.swift; sourceTree = "<group>"; };
+		B0D073882951F2D00036B338 /* SpheroV1Toy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpheroV1Toy.swift; sourceTree = "<group>"; };
+		B0D073892951F2D00036B338 /* SpheroV1ToyCore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpheroV1ToyCore.swift; sourceTree = "<group>"; };
+		B0D0738A2951F2D00036B338 /* BB8Toy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BB8Toy.swift; sourceTree = "<group>"; };
+		B0D0738C2951F2D00036B338 /* SensorControlV2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SensorControlV2.swift; sourceTree = "<group>"; };
+		B0D0738D2951F2D00036B338 /* BB9EToy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BB9EToy.swift; sourceTree = "<group>"; };
+		B0D0738E2951F2D00036B338 /* SpheroV2Toy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpheroV2Toy.swift; sourceTree = "<group>"; };
+		B0D0738F2951F2D00036B338 /* BoltToy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoltToy.swift; sourceTree = "<group>"; };
+		B0D073902951F2D00036B338 /* R2D2Toy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = R2D2Toy.swift; sourceTree = "<group>"; };
+		B0D073912951F2D00036B338 /* SpheroV2ToyCore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpheroV2ToyCore.swift; sourceTree = "<group>"; };
+		B0D073922951F2D00036B338 /* MiniToy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MiniToy.swift; sourceTree = "<group>"; };
+		B0D073932951F2D00036B338 /* ToyProtocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToyProtocols.swift; sourceTree = "<group>"; };
+		B0D073942951F2D00036B338 /* CBUUID+SpheroUUIDs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CBUUID+SpheroUUIDs.swift"; sourceTree = "<group>"; };
+		B0D073962951F2D00036B338 /* ToyBox.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToyBox.swift; sourceTree = "<group>"; };
+		B0D073972951F2D00036B338 /* Color+Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Color+Utils.swift"; sourceTree = "<group>"; };
+		B0D073992951F2D00036B338 /* SensorUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SensorUtils.swift; sourceTree = "<group>"; };
+		B0D0739B2951F2D00036B338 /* CommandOperationV2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommandOperationV2.swift; sourceTree = "<group>"; };
+		B0D0739C2951F2D00036B338 /* CommandSequencerV2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommandSequencerV2.swift; sourceTree = "<group>"; };
+		B0D0739D2951F2D00036B338 /* CommandV2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommandV2.swift; sourceTree = "<group>"; };
+		B0D0739F2951F2D00036B338 /* VersionsCommandResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VersionsCommandResponse.swift; sourceTree = "<group>"; };
+		B0D073A02951F2D00036B338 /* ShouldActionCompleteResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShouldActionCompleteResponse.swift; sourceTree = "<group>"; };
+		B0D073A12951F2D00036B338 /* SensorCommandResponseV2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SensorCommandResponseV2.swift; sourceTree = "<group>"; };
+		B0D073A22951F2D00036B338 /* SensorCommandResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SensorCommandResponse.swift; sourceTree = "<group>"; };
+		B0D073A32951F2D00036B338 /* SensorMaskCommandResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SensorMaskCommandResponse.swift; sourceTree = "<group>"; };
+		B0D073A42951F2D00036B338 /* PowerStateResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PowerStateResponse.swift; sourceTree = "<group>"; };
+		B0D073A52951F2D00036B338 /* CollisionData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollisionData.swift; sourceTree = "<group>"; };
+		B0D073A72951F2D00036B338 /* CommandV1Operation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommandV1Operation.swift; sourceTree = "<group>"; };
+		B0D073A82951F2D00036B338 /* CommandV1Sequencer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommandV1Sequencer.swift; sourceTree = "<group>"; };
+		B0D073A92951F2D00036B338 /* CommandV1.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommandV1.swift; sourceTree = "<group>"; };
+		B0D073AA2951F2D00036B338 /* Double+Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Double+Utils.swift"; sourceTree = "<group>"; };
+		B0D073AB2951F2D00036B338 /* String+Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Utils.swift"; sourceTree = "<group>"; };
 		B0EE0911291A469F00828D11 /* AfterLife.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AfterLife.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B0EE0914291A469F00828D11 /* AfterLifeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AfterLifeApp.swift; sourceTree = "<group>"; };
 		B0EE0916291A469F00828D11 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -359,7 +437,6 @@
 			isa = PBXGroup;
 			children = (
 				B0356135291A5B9800EEA0F3 /* MainInteraction2View.swift */,
-				B0356139291A87BD00EEA0F3 /* SingleHistoryView.swift */,
 			);
 			path = TabInteraction2;
 			sourceTree = "<group>";
@@ -378,6 +455,149 @@
 				B082BAEE2951E1EB00FB9701 /* MainInteraction5View.swift */,
 			);
 			path = TabInteraction5;
+			sourceTree = "<group>";
+		};
+		B0D073762951F2D00036B338 /* SpheroStarter */ = {
+			isa = PBXGroup;
+			children = (
+				B0D073782951F2D00036B338 /* Graph */,
+				B0D0737C2951F2D00036B338 /* SpheroStatusViewController.swift */,
+				B0D0737D2951F2D00036B338 /* SpheroSDK */,
+			);
+			path = SpheroStarter;
+			sourceTree = "<group>";
+		};
+		B0D073782951F2D00036B338 /* Graph */ = {
+			isa = PBXGroup;
+			children = (
+				B0D073792951F2D00036B338 /* GraphView.swift */,
+				B0D0737A2951F2D00036B338 /* CGContext+GraphLines.swift */,
+				B0D0737B2951F2D00036B338 /* GraphSegment.swift */,
+			);
+			path = Graph;
+			sourceTree = "<group>";
+		};
+		B0D0737D2951F2D00036B338 /* SpheroSDK */ = {
+			isa = PBXGroup;
+			children = (
+				B0D0737E2951F2D00036B338 /* SharedToyBox.swift */,
+				B0D0737F2951F2D00036B338 /* SDK */,
+			);
+			path = SpheroSDK;
+			sourceTree = "<group>";
+		};
+		B0D0737F2951F2D00036B338 /* SDK */ = {
+			isa = PBXGroup;
+			children = (
+				B0D073802951F2D00036B338 /* SDKUtils.swift */,
+				B0D073812951F2D00036B338 /* BLE */,
+				B0D073972951F2D00036B338 /* Color+Utils.swift */,
+				B0D073982951F2D00036B338 /* Commands */,
+				B0D073AA2951F2D00036B338 /* Double+Utils.swift */,
+				B0D073AB2951F2D00036B338 /* String+Utils.swift */,
+			);
+			path = SDK;
+			sourceTree = "<group>";
+		};
+		B0D073812951F2D00036B338 /* BLE */ = {
+			isa = PBXGroup;
+			children = (
+				B0D073822951F2D00036B338 /* Toy */,
+				B0D073942951F2D00036B338 /* CBUUID+SpheroUUIDs.swift */,
+				B0D073952951F2D00036B338 /* ToyBox */,
+			);
+			path = BLE;
+			sourceTree = "<group>";
+		};
+		B0D073822951F2D00036B338 /* Toy */ = {
+			isa = PBXGroup;
+			children = (
+				B0D073832951F2D00036B338 /* Toy.swift */,
+				B0D073842951F2D00036B338 /* SensorControl.swift */,
+				B0D073852951F2D00036B338 /* V1Toys */,
+				B0D0738B2951F2D00036B338 /* V2Toys */,
+				B0D073932951F2D00036B338 /* ToyProtocols.swift */,
+			);
+			path = Toy;
+			sourceTree = "<group>";
+		};
+		B0D073852951F2D00036B338 /* V1Toys */ = {
+			isa = PBXGroup;
+			children = (
+				B0D073862951F2D00036B338 /* SPRKToy.swift */,
+				B0D073872951F2D00036B338 /* SensorControlV1.swift */,
+				B0D073882951F2D00036B338 /* SpheroV1Toy.swift */,
+				B0D073892951F2D00036B338 /* SpheroV1ToyCore.swift */,
+				B0D0738A2951F2D00036B338 /* BB8Toy.swift */,
+			);
+			path = V1Toys;
+			sourceTree = "<group>";
+		};
+		B0D0738B2951F2D00036B338 /* V2Toys */ = {
+			isa = PBXGroup;
+			children = (
+				B0D0738C2951F2D00036B338 /* SensorControlV2.swift */,
+				B0D0738D2951F2D00036B338 /* BB9EToy.swift */,
+				B0D0738E2951F2D00036B338 /* SpheroV2Toy.swift */,
+				B0D0738F2951F2D00036B338 /* BoltToy.swift */,
+				B0D073902951F2D00036B338 /* R2D2Toy.swift */,
+				B0D073912951F2D00036B338 /* SpheroV2ToyCore.swift */,
+				B0D073922951F2D00036B338 /* MiniToy.swift */,
+			);
+			path = V2Toys;
+			sourceTree = "<group>";
+		};
+		B0D073952951F2D00036B338 /* ToyBox */ = {
+			isa = PBXGroup;
+			children = (
+				B0D073962951F2D00036B338 /* ToyBox.swift */,
+			);
+			path = ToyBox;
+			sourceTree = "<group>";
+		};
+		B0D073982951F2D00036B338 /* Commands */ = {
+			isa = PBXGroup;
+			children = (
+				B0D073992951F2D00036B338 /* SensorUtils.swift */,
+				B0D0739A2951F2D00036B338 /* CommandV2 */,
+				B0D0739E2951F2D00036B338 /* CommandResponses */,
+				B0D073A62951F2D00036B338 /* CommandV1 */,
+			);
+			path = Commands;
+			sourceTree = "<group>";
+		};
+		B0D0739A2951F2D00036B338 /* CommandV2 */ = {
+			isa = PBXGroup;
+			children = (
+				B0D0739B2951F2D00036B338 /* CommandOperationV2.swift */,
+				B0D0739C2951F2D00036B338 /* CommandSequencerV2.swift */,
+				B0D0739D2951F2D00036B338 /* CommandV2.swift */,
+			);
+			path = CommandV2;
+			sourceTree = "<group>";
+		};
+		B0D0739E2951F2D00036B338 /* CommandResponses */ = {
+			isa = PBXGroup;
+			children = (
+				B0D0739F2951F2D00036B338 /* VersionsCommandResponse.swift */,
+				B0D073A02951F2D00036B338 /* ShouldActionCompleteResponse.swift */,
+				B0D073A12951F2D00036B338 /* SensorCommandResponseV2.swift */,
+				B0D073A22951F2D00036B338 /* SensorCommandResponse.swift */,
+				B0D073A32951F2D00036B338 /* SensorMaskCommandResponse.swift */,
+				B0D073A42951F2D00036B338 /* PowerStateResponse.swift */,
+				B0D073A52951F2D00036B338 /* CollisionData.swift */,
+			);
+			path = CommandResponses;
+			sourceTree = "<group>";
+		};
+		B0D073A62951F2D00036B338 /* CommandV1 */ = {
+			isa = PBXGroup;
+			children = (
+				B0D073A72951F2D00036B338 /* CommandV1Operation.swift */,
+				B0D073A82951F2D00036B338 /* CommandV1Sequencer.swift */,
+				B0D073A92951F2D00036B338 /* CommandV1.swift */,
+			);
+			path = CommandV1;
 			sourceTree = "<group>";
 		};
 		B0EE0908291A469F00828D11 = {
@@ -403,6 +623,7 @@
 		B0EE0913291A469F00828D11 /* AfterLife */ = {
 			isa = PBXGroup;
 			children = (
+				B0D073762951F2D00036B338 /* SpheroStarter */,
 				B0F4516D291A9DD800CFB224 /* BLE */,
 				B0EE0963291A4B9B00828D11 /* SwiftUICharts */,
 				B0EE0956291A488400828D11 /* CoreML */,
@@ -1179,16 +1400,20 @@
 				B0EE0A86291A4B9B00828D11 /* RangedLineChartDataPoint.swift in Sources */,
 				B0EE0A38291A4B9B00828D11 /* ChartMetadata.swift in Sources */,
 				B0EE0917291A469F00828D11 /* ContentView.swift in Sources */,
+				B0D073C82951F2D10036B338 /* CBUUID+SpheroUUIDs.swift in Sources */,
 				B0EE0A31291A4B9B00828D11 /* GradientStop.swift in Sources */,
 				B0EE0A29291A4B9B00828D11 /* StackedBarChart.swift in Sources */,
 				B0EE0952291A480200828D11 /* MainInteraction3View.swift in Sources */,
 				B0EE0A44291A4B9B00828D11 /* HeaderBox.swift in Sources */,
 				B0EE0A8A291A4B9B00828D11 /* FilledLineChart.swift in Sources */,
 				B0EE0A77291A4B9B00828D11 /* LineShape.swift in Sources */,
+				B0D073DA2951F2D10036B338 /* String+Utils.swift in Sources */,
 				B0EE093F291A46D100828D11 /* BLEManager.swift in Sources */,
 				B0EE0A24291A4B9B00828D11 /* StackedBarDataPoint.swift in Sources */,
+				B0D073BA2951F2D10036B338 /* SensorControl.swift in Sources */,
 				B0EE0A4C291A4B9B00828D11 /* DoughnutChartStyle.swift in Sources */,
 				B0EE0961291A488400828D11 /* CGImagePropertyOrientation+UIImageOrientation.swift in Sources */,
+				B0D073CC2951F2D10036B338 /* CommandOperationV2.swift in Sources */,
 				B0EE0A1E291A4B9B00828D11 /* StackedBarChartData.swift in Sources */,
 				B0EE0A82291A4B9B00828D11 /* LineChartProtocols.swift in Sources */,
 				B0EE0A36291A4B9B00828D11 /* LegendData.swift in Sources */,
@@ -1200,10 +1425,12 @@
 				B0EE0A84291A4B9B00828D11 /* LineChartData.swift in Sources */,
 				B0EE0A8C291A4B9B00828D11 /* PointsSubView.swift in Sources */,
 				B0EE0A22291A4B9B00828D11 /* BarChartData.swift in Sources */,
+				B0D073CE2951F2D10036B338 /* CommandV2.swift in Sources */,
 				B0EE0A32291A4B9B00828D11 /* Stroke.swift in Sources */,
 				B0EE0A30291A4B9B00828D11 /* BarChartEnums.swift in Sources */,
 				B0EE0A51291A4B9B00828D11 /* PieChartDataPoint.swift in Sources */,
 				B0EE0A5F291A4B9B00828D11 /* ExtraLineData.swift in Sources */,
+				B0D073B52951F2D10036B338 /* GraphSegment.swift in Sources */,
 				B0EE0A3F291A4B9B00828D11 /* CustomNoDataView.swift in Sources */,
 				B0EE0A3A291A4B9B00828D11 /* ChartImageController.swift in Sources */,
 				B0EE0A5C291A4B9B00828D11 /* ExtraLineStyle.swift in Sources */,
@@ -1215,16 +1442,19 @@
 				B0EE0A43291A4B9B00828D11 /* Extensions.swift in Sources */,
 				B0EE0A2B291A4B9B00828D11 /* BarChartSubViews.swift in Sources */,
 				B0EE0A7B291A4B9B00828D11 /* MultiLineDataSet.swift in Sources */,
+				B0D073B72951F2D10036B338 /* SharedToyBox.swift in Sources */,
 				B0EE0A18291A4B9B00828D11 /* BarDataSet.swift in Sources */,
 				B0EE0941291A470000828D11 /* BLEObservable.swift in Sources */,
 				B0EE0A1B291A4B9B00828D11 /* GroupingData.swift in Sources */,
 				B0EE0A4A291A4B9B00828D11 /* PieDataSet.swift in Sources */,
+				B0D073C92951F2D10036B338 /* ToyBox.swift in Sources */,
 				B0EE0A88291A4B9B00828D11 /* LineChartView.swift in Sources */,
 				B0EE0A14291A4B9B00828D11 /* RoundedRectangleBarShape.swift in Sources */,
 				B0EE0A73291A4B9B00828D11 /* YAxisGrid.swift in Sources */,
 				B0EE0A1C291A4B9B00828D11 /* BarChartProtocolsExtensions.swift in Sources */,
 				B0EE0A85291A4B9B00828D11 /* MultiLineChartData.swift in Sources */,
 				B0EE0A59291A4B9B00828D11 /* VerticalGridShape.swift in Sources */,
+				B0D073D12951F2D10036B338 /* SensorCommandResponseV2.swift in Sources */,
 				B0EE0A58291A4B9B00828D11 /* ExtraLineShape.swift in Sources */,
 				B0EE0A2A291A4B9B00828D11 /* Bars.swift in Sources */,
 				B0EE0A8E291A4B9B00828D11 /* MultiLineChart.swift in Sources */,
@@ -1232,18 +1462,23 @@
 				B0EE0A83291A4B9B00828D11 /* RangedLineChartData.swift in Sources */,
 				B0EE0A3C291A4B9B00828D11 /* SharedProtocolsExtensions.swift in Sources */,
 				B0EE0A60291A4B9B00828D11 /* ChartViewData.swift in Sources */,
+				B0D073C62951F2D10036B338 /* MiniToy.swift in Sources */,
 				B0EE0A54291A4B9B00828D11 /* PieChartEnums.swift in Sources */,
 				B0EE0A4B291A4B9B00828D11 /* PieChartStyle.swift in Sources */,
+				B0D073BF2951F2D10036B338 /* BB8Toy.swift in Sources */,
 				B0EE0A19291A4B9B00828D11 /* BarStyle.swift in Sources */,
 				B0EE0A6C291A4B9B00828D11 /* XAxisGrid.swift in Sources */,
 				B0EE0A2C291A4B9B00828D11 /* BarChart.swift in Sources */,
+				B0D073C02951F2D10036B338 /* SensorControlV2.swift in Sources */,
+				B0D073C12951F2D10036B338 /* BB9EToy.swift in Sources */,
 				B0EE0A53291A4B9B00828D11 /* DoughnutChart.swift in Sources */,
 				B0EE0A87291A4B9B00828D11 /* LineChartDataPoint.swift in Sources */,
 				B082BAEF2951E1EB00FB9701 /* MainInteraction5View.swift in Sources */,
 				B0EE0960291A488400828D11 /* VNClassificationObservation+confidenceString.swift in Sources */,
 				B0EE0A63291A4B9B00828D11 /* PointOfInterestProtocol.swift in Sources */,
+				B0D073C42951F2D10036B338 /* R2D2Toy.swift in Sources */,
 				B0EE0A47291A4B9B00828D11 /* disableAnimation.swift in Sources */,
-				B035613A291A87BD00EEA0F3 /* SingleHistoryView.swift in Sources */,
+				B0D073BC2951F2D10036B338 /* SensorControlV1.swift in Sources */,
 				B0EE0A34291A4B9B00828D11 /* AccessibilityRectangle.swift in Sources */,
 				B0EE0A61291A4B9B00828D11 /* DataFunctionsProtocol.swift in Sources */,
 				B0EE0A62291A4B9B00828D11 /* LineAndBarProtocolsExtentions.swift in Sources */,
@@ -1254,46 +1489,68 @@
 				B0EE0A16291A4B9B00828D11 /* GroupedBarDataSets.swift in Sources */,
 				B0EE0A69291A4B9B00828D11 /* TouchOverlayBox.swift in Sources */,
 				B0EE0A5A291A4B9B00828D11 /* DiamondShape.swift in Sources */,
+				B0D073C32951F2D10036B338 /* BoltToy.swift in Sources */,
 				B0EE0A5D291A4B9B00828D11 /* GridStyle.swift in Sources */,
 				B0EE0A37291A4B9B00828D11 /* InfoViewData.swift in Sources */,
 				B0EE0A64291A4B9B00828D11 /* LineAndBarProtocols.swift in Sources */,
 				B0EE0A2F291A4B9B00828D11 /* BarLayout.swift in Sources */,
 				B0EE0A8F291A4B9B00828D11 /* LineChartEnums.swift in Sources */,
 				B0EE0A89291A4B9B00828D11 /* RangedLineChart.swift in Sources */,
+				B0D073B62951F2D10036B338 /* SpheroStatusViewController.swift in Sources */,
 				B0EE0A70291A4B9B00828D11 /* FloatingInfoBox.swift in Sources */,
 				B0EE0A7A291A4B9B00828D11 /* RangedLineDataSet.swift in Sources */,
 				B0EE0915291A469F00828D11 /* AfterLifeApp.swift in Sources */,
 				B0EE0A27291A4B9B00828D11 /* CornerRadius.swift in Sources */,
 				B0EE0A91291A4B9B00828D11 /* FilledTopLine.swift in Sources */,
+				B0D073D52951F2D10036B338 /* CollisionData.swift in Sources */,
+				B0D073B42951F2D10036B338 /* CGContext+GraphLines.swift in Sources */,
 				B0EE0A4F291A4B9B00828D11 /* PieChartData.swift in Sources */,
 				B0EE0A35291A4B9B00828D11 /* SubscriptionSet.swift in Sources */,
+				B0D073D32951F2D10036B338 /* SensorMaskCommandResponse.swift in Sources */,
 				B0EE0A4D291A4B9B00828D11 /* PieChartProtocolsExtentions.swift in Sources */,
 				B0EE0A74291A4B9B00828D11 /* ExtraLine.swift in Sources */,
 				B0EE0A67291A4B9B00828D11 /* RotatedText.swift in Sources */,
 				B0EE0A3D291A4B9B00828D11 /* SharedProtocols.swift in Sources */,
 				B0EE0A65291A4B9B00828D11 /* HorizontalGridView.swift in Sources */,
+				B0D073D22951F2D10036B338 /* SensorCommandResponse.swift in Sources */,
 				B0EE0A50291A4B9B00828D11 /* DoughnutChartData.swift in Sources */,
 				B0EE0A46291A4B9B00828D11 /* Legends.swift in Sources */,
 				B0EE0A5E291A4B9B00828D11 /* ExtraLineDataPoint.swift in Sources */,
 				B0EE0A42291A4B9B00828D11 /* SharedEnums.swift in Sources */,
 				B0EE0A7E291A4B9B00828D11 /* RangedLineStyle.swift in Sources */,
+				B0D073B82951F2D10036B338 /* SDKUtils.swift in Sources */,
 				B0EE0A80291A4B9B00828D11 /* LineChartStyle.swift in Sources */,
 				B0EE0A76291A4B9B00828D11 /* AxisBorders.swift in Sources */,
 				B0EE0A28291A4B9B00828D11 /* GroupedBarChart.swift in Sources */,
+				B0D073B92951F2D10036B338 /* Toy.swift in Sources */,
 				B0EE0A2E291A4B9B00828D11 /* HorizontalBarChart.swift in Sources */,
+				B0D073C22951F2D10036B338 /* SpheroV2Toy.swift in Sources */,
+				B0D073D72951F2D10036B338 /* CommandV1Sequencer.swift in Sources */,
 				B0F4516F291AAB9400CFB224 /* SinglePeripheralView.swift in Sources */,
 				B0EE0A75291A4B9B00828D11 /* YAxisPOI.swift in Sources */,
+				B0D073C72951F2D10036B338 /* ToyProtocols.swift in Sources */,
 				B0EE0A5B291A4B9B00828D11 /* Marker.swift in Sources */,
 				B0EE0A90291A4B9B00828D11 /* PathExtensions.swift in Sources */,
+				B0D073D62951F2D10036B338 /* CommandV1Operation.swift in Sources */,
+				B0D073BD2951F2D10036B338 /* SpheroV1Toy.swift in Sources */,
 				B0EE0A1A291A4B9B00828D11 /* BarChartStyle.swift in Sources */,
 				B0EE0A71291A4B9B00828D11 /* XAxisPOI.swift in Sources */,
+				B0D073C52951F2D10036B338 /* SpheroV2ToyCore.swift in Sources */,
 				B0EE095E291A488400828D11 /* CoreMLInterface.swift in Sources */,
 				B0EE0A81291A4B9B00828D11 /* LineChartProtocolsExtensions.swift in Sources */,
 				B0EE0A3E291A4B9B00828D11 /* API.swift in Sources */,
 				B0EE0A49291A4B9B00828D11 /* DoughnutSegmentShape.swift in Sources */,
+				B0D073D92951F2D10036B338 /* Double+Utils.swift in Sources */,
+				B0D073BE2951F2D10036B338 /* SpheroV1ToyCore.swift in Sources */,
 				B0EE0A26291A4B9B00828D11 /* GroupedBarDataPoint.swift in Sources */,
 				B0EE0A68291A4B9B00828D11 /* PositionedPOILabel.swift in Sources */,
+				B0D073CB2951F2D10036B338 /* SensorUtils.swift in Sources */,
+				B0D073BB2951F2D10036B338 /* SPRKToy.swift in Sources */,
+				B0D073B32951F2D10036B338 /* GraphView.swift in Sources */,
+				B0D073D82951F2D10036B338 /* CommandV1.swift in Sources */,
 				B0EE0A33291A4B9B00828D11 /* TouchOverlayMarker.swift in Sources */,
+				B0D073CF2951F2D10036B338 /* VersionsCommandResponse.swift in Sources */,
+				B0D073D02951F2D10036B338 /* ShouldActionCompleteResponse.swift in Sources */,
 				B0EE0A6F291A4B9B00828D11 /* InfoBox.swift in Sources */,
 				B0EE0A17291A4B9B00828D11 /* RangedBarDataSet.swift in Sources */,
 				B0EE094F291A480200828D11 /* MainInteraction1View.swift in Sources */,
@@ -1305,8 +1562,11 @@
 				B0EE0A6B291A4B9B00828D11 /* XAxisLabels.swift in Sources */,
 				B0EE0A6A291A4B9B00828D11 /* LineAndBarEnums.swift in Sources */,
 				B0EE0A55291A4B9B00828D11 /* LinearTrendLineShape.swift in Sources */,
+				B0D073CD2951F2D10036B338 /* CommandSequencerV2.swift in Sources */,
+				B0D073D42951F2D10036B338 /* PowerStateResponse.swift in Sources */,
 				B0EE0A1F291A4B9B00828D11 /* GroupedBarChartData.swift in Sources */,
 				B0EE0A92291A4B9B00828D11 /* PointMarkers.swift in Sources */,
+				B0D073CA2951F2D10036B338 /* Color+Utils.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
