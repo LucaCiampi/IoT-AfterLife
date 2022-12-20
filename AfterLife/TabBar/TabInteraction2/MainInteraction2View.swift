@@ -61,24 +61,17 @@ struct MainInteraction2View: View {
             DispatchQueue.main.async {
                 if let acceleration = data.accelerometer?.filteredAcceleration {
                     
-                    // PAS BIEN!!!
-                    currentAccData.append(contentsOf: [acceleration.x!, acceleration.y!, acceleration.z!])
-                    if acceleration.x! >= 0.65 {
-                        print("droite")
-                        spheroHasMoved = true
-                    }else if acceleration.x! <= -0.65 {
-                        print("gauche")
-                        spheroHasMoved = true
-                    }
-                    
                     // checks secousse
                     let absSum = abs(acceleration.x!)+abs(acceleration.y!)+abs(acceleration.z!)
-                    if absSum > 14 {
+                    
+                    if absSum > 1.7 {
                         print("Secousse")
                         spheroHasMoved = true
-                    }else{
-                        print("IDLE")
                     }
+                }
+                
+                if let aaaa = data.verticalAcceleration {
+                    print(aaaa)
                 }
                 
                 if let gyro = data.gyro?.rotationRate {
