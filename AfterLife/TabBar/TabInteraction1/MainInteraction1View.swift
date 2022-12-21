@@ -14,13 +14,9 @@ struct MainInteraction1View: View {
     var body: some View {
         VStack {
             
-            FilledLineChart(chartData: LineChartData(dataSets: LineDataSet(dataPoints: bleInterface.points)))
-            Button("Stop") {
-                bleInterface.sendMessage(message: "stopAccelero")
-            }.disabled(bleInterface.hasLessThanHundredPoints)
+            Text("coucou")
         }
         .padding()
-        .onAppear(perform: bleInterface.listenForAccelerometer)
     }
 }
 

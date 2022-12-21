@@ -7,14 +7,14 @@ class BLEManager: NSObject {
     
     var isBLEEnabled = false
     var isScanning = false
-    //let authCBUUID = CBUUID(string: "10B91146-5A91-D7D2-AF42-53B86B277F09")
-    let authCBUUID = CBUUID(string: "EE25B7B6-7798-4749-8B12-734CFBC5CAA9")
-    let writeCBUUID = CBUUID(string: "6E400002-B5A3-F393-E0A9-E50E24DCCA9E")
-    let writeImageRecognitionCBUUID = CBUUID(string: "FA083A03-B3DD-4529-880B-FF430B85E410")
-    let readCBUUID = CBUUID(string: "6E400003-B5A3-F393-E0A9-E50E24DCCA9E")
-    let readAccelerometerCBUUID = CBUUID(string: "6E400002-B5A3-F393-E0A9-E50E24DCCA9E")
-    let readCityCBUUID = CBUUID(string: "558759EE-0F86-49E7-A38A-DBE48CF8B237")
-    let readImageRecognitionCBUUID = CBUUID(string: "FA083A03-B3DD-4529-880B-FF430B85E410")
+    
+    // Interaction 5 - poker
+    let pokerAuthCBUUID = CBUUID(string: "839B01C2-2F62-434F-82B8-670D7057AB98")
+    let pokerWriteCBUUID = CBUUID(string: "4AA55938-382F-455E-B447-0C3676B8910F")
+    let pokerReadCBUUID = CBUUID(string: "78CB0348-462A-441B-916F-320BC21DAF73")
+    var messageReceivedCallbackPokerEsp32: ((Data?)->())?
+    var sendDataCallbackPokerEsp32: ((String?) -> ())?
+    
     var centralManager: CBCentralManager?
     var connectedPeripherals = [CBPeripheral]()
     var readyPeripherals = [CBPeripheral]()
@@ -24,11 +24,10 @@ class BLEManager: NSObject {
     var disconnectCallback: ((CBPeripheral) -> ())?
     var didFinishDiscoveryCallback: ((CBPeripheral) -> ())?
     var globalDisconnectCallback: ((CBPeripheral) -> ())?
+    
     var sendDataCallback: ((String?) -> ())?
-    var sendDataCallbackImageRecognition: ((String?) -> ())?
-    var messageReceivedCallback:((Data?)->())?
-    var messageReceivedCallbackAccelerometer:((Data?)->())?
-    var messageReceivedCallbackCities:((Data?)->())?
+    
+    var messageReceivedCallback: ((Data?)->())?
     
     override init() {
         super.init()
@@ -56,12 +55,11 @@ class BLEManager: NSObject {
         messageReceivedCallback = callback
     }
     
-    func listenForAccelerometer(callback:@escaping(Data?)->()) {
-        messageReceivedCallbackAccelerometer = callback
-    }
-    
-    func listenForCities(callback:@escaping(Data?)->()) {
-        messageReceivedCallbackCities = callback
+    /**
+     Interaction 5 listen for messages
+     */
+    func listenForPokerEsp32(callback:@escaping(Data?)->()) {
+        messageReceivedCallbackPokerEsp32 = callback
     }
     
     func connectPeripheral(_ periph: CBPeripheral, callback: @escaping (CBPeripheral) -> ()) {
@@ -104,29 +102,34 @@ class BLEManager: NSObject {
     func sendData(data: Data, callback: @escaping (String?) -> ()) {
         sendDataCallback = callback
         for periph in readyPeripherals {
-            if let char = BLEManager.instance.getCharForUUID(writeCBUUID, forperipheral: periph) {
+            //if let char = BLEManager.instance.getCharForUUID(writeCBUUID, forperipheral: periph) {
+            if let char = BLEManager.instance.getCharForUUID(pokerWriteCBUUID, forperipheral: periph) {
                 periph.writeValue(data, for: char, type: CBCharacteristicWriteType.withResponse)
             }
         }
     }
     
-    func sendDataToImageRecognition(data: Data, callback: @escaping (String?) -> ()) {
-        sendDataCallbackImageRecognition = callback
+    /**
+     Interaction 5 sending messages
+     */
+    func sendDataToPokerESP(data: Data, callback: @escaping (String?) -> ()) {
+        sendDataCallbackPokerEsp32 = callback
         for periph in readyPeripherals {
-            if let char = BLEManager.instance.getCharForUUID(writeImageRecognitionCBUUID, forperipheral: periph) {
+            if let char = BLEManager.instance.getCharForUUID(pokerWriteCBUUID, forperipheral: periph) {
                 periph.writeValue(data, for: char, type: CBCharacteristicWriteType.withResponse)
             }
         }
     }
-
+    
     func readData() {
         for periph in readyPeripherals {
-            if let char = BLEManager.instance.getCharForUUID(readCBUUID, forperipheral: periph) {
+            //if let char = BLEManager.instance.getCharForUUID(readCBUUID, forperipheral: periph) {
+            if let char = BLEManager.instance.getCharForUUID(pokerReadCBUUID, forperipheral: periph) {
                 periph.readValue(for: char)
             }
         }
     }
-
+    
 }
 
 extension BLEManager: CBPeripheralDelegate {
@@ -144,7 +147,7 @@ extension BLEManager: CBPeripheralDelegate {
             if count == 0 {
                 for s in services {
                     for c in s.characteristics! {
-                            peripheral.setNotifyValue(true, for: c)
+                        peripheral.setNotifyValue(true, for: c)
                     }
                 }
                 readyPeripherals.append(peripheral)
@@ -174,7 +177,7 @@ extension BLEManager: CBCentralManagerDelegate {
             connectCallback?(peripheral)
         }
     }
-        
+    
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
         connectedPeripherals.removeAll { $0 == peripheral }
         readyPeripherals.removeAll { $0 == peripheral }
@@ -182,14 +185,15 @@ extension BLEManager: CBCentralManagerDelegate {
     }
     
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
-        if characteristic == getCharForUUID(readAccelerometerCBUUID, forperipheral: peripheral) {
-            print("Message recieved from accelerometer")
-            messageReceivedCallbackAccelerometer?(characteristic.value)
+        if characteristic == getCharForUUID(pokerReadCBUUID, forperipheral: peripheral) {
+            print("Message recieved from poker ESP32")
+            messageReceivedCallbackPokerEsp32?(characteristic.value)
         }
-        else if characteristic == getCharForUUID(readCityCBUUID, forperipheral: peripheral) {
+        // TODO: implement other characteristics
+        /*else if characteristic == getCharForUUID(pokerReadCBUUID, forperipheral: peripheral) {
             print("Message recieved from cities")
             messageReceivedCallbackCities?(characteristic.value)
-        }
+        }*/
         else {
             print("Message recieved from unknown UUID")
             messageReceivedCallback?(characteristic.value)
@@ -197,9 +201,9 @@ extension BLEManager: CBCentralManagerDelegate {
     }
     
     func peripheral(_ peripheral: CBPeripheral, didWriteValueFor characteristic: CBCharacteristic, error: Error?) {
-        if characteristic == getCharForUUID(writeImageRecognitionCBUUID, forperipheral: peripheral) {
-            print("Message sent to image recognition")
-            sendDataCallbackImageRecognition?(peripheral.name)
+        if characteristic == getCharForUUID(pokerWriteCBUUID, forperipheral: peripheral) {
+            print("Message sent to poker ESP32")
+            sendDataCallbackPokerEsp32?(peripheral.name)
         }
         else {
             print("Message sent to unknown UUID")

@@ -15,7 +15,9 @@ struct MainInteraction5View: View {
     @State var scanButtonString = "Start scan"
     @State var isScanningDevices = false
     @State var isShowingDetailView = false
+    
     @State var pokerSoundStatus = ""
+    @State var pokerEsp32ReceivedMessage = ""
     
     var esp32Interaction5Name = "rfid-luca"
     @State var player: AVAudioPlayer?
@@ -38,7 +40,7 @@ struct MainInteraction5View: View {
                             isScanningDevices = !isScanningDevices
                             if (isScanningDevices) {
                                 scanButtonString = "Stop scan"
-                                bleInterface.connectToPeriphWithName(name: esp32Interaction5Name)
+                                bleInterface.connectToInteraction5Esp32()
                             }
                             else {
                                 scanButtonString = "Start scan"
@@ -53,6 +55,9 @@ struct MainInteraction5View: View {
                         pokerSoundStatus = "just played"
                     }
                     Text(pokerSoundStatus)
+                    Text(pokerEsp32ReceivedMessage).onAppear {
+                        bleInterface.listenForPokerEsp32()
+                    }
                 }
             }.padding()
         }.onChange(of: bleInterface.connectionState, perform: { newValue in
@@ -79,6 +84,9 @@ struct MainInteraction5View: View {
             else {
                 connectionString = "No ESP32 connected"
             }
+        }).onChange(of: bleInterface.pokerDataReceived, perform: { newValue in
+            pokerEsp32ReceivedMessage = bleInterface.pokerDataReceived[0].content + " just badged !"
+            makePokerGameSound()
         })
         .padding()
     }

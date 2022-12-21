@@ -15,12 +15,12 @@ struct Periph: Identifiable, Equatable {
     var name: String
 }
 
+struct DataReceived:Identifiable,Equatable{
+    var id = UUID().uuidString
+    var content:String
+}
+
 class BLEObservable: ObservableObject {
-    
-    @Published var points: [LineChartDataPoint] = []
-    @Published var hasLessThanHundredPoints: Bool = true
-    //@Published var cities: [CityListElement] = []
-    //@Published var history: [HistoryListElement] = []
     
     enum ConnectionState {
         case disconnected, connecting, discovering, ready
@@ -30,7 +30,7 @@ class BLEObservable: ObservableObject {
     @Published var connectedPeripheral: Periph? = nil
     @Published var connectionState: ConnectionState = .disconnected
     
-    let stopCitiesMessage = "stopCities"
+    @Published var pokerDataReceived: [DataReceived] = []
     
     init() {
         _ = BLEManager.instance
@@ -107,29 +107,34 @@ class BLEObservable: ObservableObject {
     /**
      Listens for messages on the "readAccelerometerCBUUID" constant
      */
-    func listenForAccelerometer() {
-        BLEManager.instance.listenForAccelerometer { data in
-            if let message = String(bytes: data!, encoding: .utf8) {
-                print(message)
-                
-                //self.appendToHistory(text: message)
-                
-                if let newAcceleroPoint = Double(message) {
-                    self.appendLineChartPoint(value: newAcceleroPoint)
-                }
-            }
-            else {
-                print("ERROR : could not read accelerometer data (wrong encoding, need utf-8)")
+    func listenForPokerEsp32() {
+        BLEManager.instance.listenForPokerEsp32() { data in
+            if let d = data,
+               let s = String(data: d, encoding: .utf8){
+                self.pokerDataReceived.append(DataReceived(content: s))
             }
         }
     }
     
     /**
      Connects the the ESP32 managing the interaction 3 which is the sphero bolt in a cuve
+     TODO: change this for UUID in BLEManager
      */
     func connectToInteraction3Esp32() {
         BLEManager.instance.scan { p, pname in
             var periph = Periph(blePeriph: p, name: pname)
+            if periph.name == "rfid-luca" {
+                self.connectTo(p: periph)
+            }
+        }
+    }
+    
+    /**
+     Connects the the ESP32 managing the interaction 5 which is the poker game
+     */
+    func connectToInteraction5Esp32() {
+        BLEManager.instance.scan { p, pname in
+            let periph = Periph(blePeriph: p, name: pname)
             if periph.name == "rfid-luca" {
                 self.connectTo(p: periph)
             }
@@ -142,7 +147,6 @@ class BLEObservable: ObservableObject {
     func sendMessage(message: String) {
         if let messageToSend: Data = message.data(using: .utf8) {
             print("Sent : " + message)
-            //self.appendToHistory(text: "Sent : " + message)
             BLEManager.instance.sendData(data: messageToSend) { returnMessage in
                 print(returnMessage ?? "no return message")
             }
@@ -153,51 +157,22 @@ class BLEObservable: ObservableObject {
     }
     
     /**
-     Sends a message to the image recogntion "writeImageRecognitionCBUUID" constant
+     Sends a message to the poker ESP32
      */
-    func sendMessageToImageRecognition(message: String) {
+    func sendMessageToPokerESP32(message: String) {
         if let messageToSend: Data = message.data(using: .utf8) {
             print("Sent : " + message + " to AI")
             //self.appendToHistory(text: "Sent : " + message)
-            BLEManager.instance.sendDataToImageRecognition(data: messageToSend) { returnMessage in
+            BLEManager.instance.sendDataToPokerESP(data: messageToSend) { returnMessage in
                 print(returnMessage ?? "no return message")
             }
         }
         else {
-            print("Could not send data to AI")
+            print("Could not send data to poker")
         }
     }
 }
 
 extension BLEObservable {
-    /**
-     Appends the value to the array of LineChartDataPoint
-     */
-    func appendLineChartPoint(value: Double) {
-        if self.points.count >= 100 && self.hasLessThanHundredPoints == true {
-            self.hasLessThanHundredPoints = false
-        }
-        
-        self.points.append(LineChartDataPoint(value: value))
-    }
     
-    /**
-     Appends a city name to the array of cities
-     */
-    /*func appendCity(name: String) {
-        if self.cities.count >= 7 {
-            self.sendMessage(message: stopCitiesMessage)
-        }
-        
-        if !self.cities.contains(where: { $0.name == name }) {
-            self.cities.append(CityListElement(name: name))
-        }
-    }
-    
-    /**
-     Appends the action to the array of HistoryListElement
-     */
-    func appendToHistory(text: String) {
-        self.history.append(HistoryListElement(text: text))
-    }*/
 }
