@@ -37,7 +37,7 @@ struct MainInteraction2View: View {
                 VStack {
                     Text(spheroMovementString).onAppear {
                         if (!spheroHasMoved) {
-                            self.RetrieveSpheroMovements()
+                            self.retrieveSpheroMovements()
                         }
                     }
                 }.onChange(of: spheroHasMoved) { newValue in
@@ -49,7 +49,7 @@ struct MainInteraction2View: View {
         .padding()
     }
     
-    func RetrieveSpheroMovements() {
+    func retrieveSpheroMovements() {
         var currentAccData = [Double]()
         var currentGyroData = [Double]()
         

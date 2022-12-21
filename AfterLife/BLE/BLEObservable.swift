@@ -30,7 +30,19 @@ class BLEObservable: ObservableObject {
     @Published var connectedPeripheral: Periph? = nil
     @Published var connectionState: ConnectionState = .disconnected
     
+    // Interaction 1
+    @Published var glassesDataReceived: [DataReceived] = []
+    
+    // Interaction 3
+    @Published var cuveButton1Pressed: Bool = false
+    @Published var cuveButton2Pressed: Bool = false
+    
+    // Interaction 4
+    @Published var djiButtonPressed: Bool = false
+    
+    // Interaction 5 (maybe replace it with a boolean)
     @Published var pokerDataReceived: [DataReceived] = []
+    
     
     init() {
         _ = BLEManager.instance

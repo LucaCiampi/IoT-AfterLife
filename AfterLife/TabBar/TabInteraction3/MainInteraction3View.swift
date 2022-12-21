@@ -15,6 +15,7 @@ struct MainInteraction3View: View {
     @State var scanButtonString = "Start scan"
     @State var isScanningDevices = false
     @State var isShowingDetailView = false
+    
     @State var spheroConnectionString = "No sphero connected"
     @State var isConnectedToSphero = false
     
