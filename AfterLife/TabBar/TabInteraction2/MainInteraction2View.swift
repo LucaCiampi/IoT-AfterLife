@@ -7,6 +7,7 @@
 
 import SwiftUI
 import simd
+import AVKit
 
 struct MainInteraction2View: View {
     
@@ -20,6 +21,8 @@ struct MainInteraction2View: View {
     
     @State var spheroMovementString = "Lever hasn't been activated"
     @State var spheroHasMoved = false
+    
+    let videoUrl = Bundle.main.url(forResource: "test", withExtension: "mp4")!
     
     var body: some View {
         VStack {
@@ -42,6 +45,11 @@ struct MainInteraction2View: View {
                     }
                 }.onChange(of: spheroHasMoved) { newValue in
                     spheroMovementString = "Lever has been activated !"
+                }
+            }
+            if (spheroHasMoved) {
+                HStack {
+                    VideoPlayer(player: AVPlayer(url: videoUrl))
                 }
             }
             
@@ -82,6 +90,10 @@ struct MainInteraction2View: View {
             }
         }
         
+    }
+    
+    func playVideo() {
+        //TODO
     }
 }
 
