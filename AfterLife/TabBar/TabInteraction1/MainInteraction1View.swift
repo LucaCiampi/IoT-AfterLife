@@ -8,6 +8,17 @@
 import SwiftUI
 import simd
 
+struct SpheroInteraction1Struct:  Equatable {
+    static func == (lhs: SpheroInteraction1Struct, rhs: SpheroInteraction1Struct) -> Bool {
+        return true
+    }
+    
+    var name: String
+    var bloodGroup: String
+    @State var hasRotated = false
+    @State var hasClashed = false
+}
+
 struct MainInteraction1View: View {
     
     @EnvironmentObject var bleInterface: BLEObservable
@@ -15,78 +26,70 @@ struct MainInteraction1View: View {
     // ESP32
     @State var connectionString = "No device connected"
     @State var isScanningDevices = false
-    
-    // Spheros
-    var firstSpheroInteraction1Name = "SB-0994"
-    var secondSpheroInteraction1Name = "SB-42C1"
-    
-    @State var spheroConnectionString = "No sphero connected"
     @State var isConnectedToSpheros = false
     
-    @State var firstSpheroCurrentSituationString = "Checking if sphero is rotating"
-    @State var firstSpheroHasRotated = false
-    @State var firstSpheroHasClashed = false
+    // Spheros
+    var spherosInteraction1 = [
+        SpheroInteraction1Struct(name: "SB-0994", bloodGroup: "a"),
+        SpheroInteraction1Struct(name: "SB-42C1", bloodGroup: "b")
+    ]
     
-    @State var secondSpheroCurrentSituationString = "Checking if sphero is rotating"
-    @State var secondSpheroHasRotated = false
-    @State var secondSpheroHasClashed = false
+    //@State var spherosInteraction1Rotation = [false, false]
+    //@State var spherosInteraction1Clash = [false, false]
+    
+    @State var spheroConnectionString = "No sphero connected"
     
     var body: some View {
         VStack {
             VStack {
                 Text(spheroConnectionString)
                 Button("Connect to spheros") {
-                    SharedToyBox.instance.searchForBoltsNamed([firstSpheroInteraction1Name]) { err in
+                    SharedToyBox.instance.searchForBoltsNamed([spherosInteraction1[0].name, spherosInteraction1[1].name]) { err in
                         if err == nil {
-                            self.spheroConnectionString = "Connected to " + firstSpheroInteraction1Name + " and " + secondSpheroInteraction1Name
+                            self.spheroConnectionString = "Connected to " + String(spherosInteraction1.count) + " spheros"
                             isConnectedToSpheros = true
+                            print(SharedToyBox.instance.bolts[0].identifier)
+                            print(SharedToyBox.instance.bolts[1].identifier)
+                        }
+                        else {
+                            print(err)
                         }
                     }
                 }
             }.padding()
             
             if (isConnectedToSpheros) {
-                HStack {
-                    VStack {
-                        Text(firstSpheroInteraction1Name)
-                        Text(firstSpheroCurrentSituationString)
-                    }.onAppear {
-                        checkIfSpheroHasRotated(bolt: SharedToyBox.instance.bolts[0]) {
-                            firstSpheroHasRotated = true
+                VStack {
+                    Text(String(spherosInteraction1.count) + " spheros have rotated")
+                    Button("check rotation spheros") {
+                        for i in 0...1 {
+                            // Checks if sphero i has rotated
+                            if (spherosInteraction1[i].hasRotated == false) {
+                                // Checks rotation of sphero i
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                                    checkIfSpheroHasRotated(bolt: SharedToyBox.instance.bolts[i]) {
+                                        spherosInteraction1[i].hasRotated = true
+                                        print(spherosInteraction1[i].name + " has rotated")
+                                    }
+                                }
+                            }
+                            // Checks clash of sphero i
+                            else if (spherosInteraction1[i].hasRotated) {
+                                SharedToyBox.instance.bolts[i].setMatrix(color: .red)
+                                print("Checking if sphero " + spherosInteraction1[i].name + " has clashed")
+                                checkIfSpheroHasClashed(bolt: SharedToyBox.instance.bolts[i]) {
+                                    spherosInteraction1[i].hasClashed = true
+                                }
+                            }
+                            // Prints letter on sphero i
+                            else if (spherosInteraction1[i].hasClashed) {
+                                print("Activating leds band on cup " + spherosInteraction1[i].name)
+                                activateLedsBand()
+                                drawLetterOnMatrix(letter: spherosInteraction1[i].bloodGroup, bolt: SharedToyBox.instance.bolts[i])
+                            }
                         }
-                    }.onChange(of: firstSpheroHasRotated, perform: { newValue in
-                        SharedToyBox.instance.bolts[0].setMatrix(color: .red)
-                        firstSpheroCurrentSituationString = "Checking if sphero has clashed"
-                        checkIfSpheroHasClashed(bolt: SharedToyBox.instance.bolts[0]) {
-                            firstSpheroHasClashed = true
-                        }
-                    }).onChange(of: firstSpheroHasClashed, perform: { newValue in
-                        firstSpheroCurrentSituationString = "Activating leds band on cup"
-                        activateLedsBand()
-                        drawLetterOnMatrix(letter: "a", bolt: SharedToyBox.instance.bolts[0])
-                    }).padding()
-                    
-                    /*
-                    VStack {
-                        Text(secondSpheroInteraction1Name)
-                        Text(secondSpheroCurrentSituationString)
-                    }.onAppear {
-                        checkIfSpheroHasRotated(bolt: SharedToyBox.instance.bolts[1]) {
-                            secondSpheroHasRotated = true
-                        }
-                    }.onChange(of: secondSpheroHasRotated, perform: { newValue in
-                        SharedToyBox.instance.bolts[1].setMatrix(color: .red)
-                        secondSpheroCurrentSituationString = "Checking if sphero has clashed"
-                        checkIfSpheroHasClashed(bolt: SharedToyBox.instance.bolts[1]) {
-                            secondSpheroHasClashed = true
-                        }
-                    }).onChange(of: secondSpheroHasClashed, perform: { newValue in
-                        secondSpheroCurrentSituationString = "Activating leds band on cup"
-                        activateLedsBand()
-                        drawLetterOnMatrix(letter: "b", bolt: SharedToyBox.instance.bolts[1])
-                    }).padding()
-                    */
-                }
+                    }
+                }.padding()
             }
         }
     }
@@ -97,23 +100,28 @@ struct MainInteraction1View: View {
     func checkIfSpheroHasRotated(bolt: BoltToy?, onRotation: @escaping (() -> ())) {
         var currentGyroData = [Double]()
         
-        bolt?.sensorControl.enable(sensors: SensorMask.init(arrayLiteral: .gyro))
-        bolt?.sensorControl.interval = 1
-        bolt?.setStabilization(state: SetStabilization.State.off)
-        bolt?.sensorControl.onDataReady = { data in
-            
-            DispatchQueue.main.async {
-                if let gyro = data.gyro?.rotationRate {
-                    // TOUJOURS PAS BIEN!!!
-                    //let rotationRate: double3 = [Double(gyro.x!)/2000.0, Double(gyro.y!)/2000.0, Double(gyro.z!)/2000.0]
-                    let rotationRate: Double = abs(Double(gyro.x!)/2000.0) + abs(Double(gyro.y!)/2000.0) + abs(Double(gyro.z!)/2000.0)
-                    print(rotationRate)
-                    if (rotationRate > 0.3) {
-                        onRotation()
+        if (bolt != nil) {
+            print(bolt?.identifier)
+            bolt?.sensorControl.enable(sensors: SensorMask.init(arrayLiteral: .gyro))
+            bolt?.sensorControl.interval = 1
+            bolt?.setStabilization(state: SetStabilization.State.off)
+            bolt?.sensorControl.onDataReady = { data in
+                //print(data)
+                DispatchQueue.main.async {
+                    if let gyro = data.gyro?.rotationRate {
+                        let rotationRate: Double = abs(Double(gyro.x!)/2000.0) + abs(Double(gyro.y!)/2000.0) + abs(Double(gyro.z!)/2000.0)
+                        print(rotationRate)
+                        //if (rotationRate > 0.3) {
+                        if (rotationRate > 0.1) {
+                            onRotation()
+                        }
+                        currentGyroData.append(contentsOf: [Double(gyro.x!), Double(gyro.y!), Double(gyro.z!)])
                     }
-                    currentGyroData.append(contentsOf: [Double(gyro.x!), Double(gyro.y!), Double(gyro.z!)])
                 }
             }
+        }
+        else {
+            print("bolt introuvable")
         }
     }
     
