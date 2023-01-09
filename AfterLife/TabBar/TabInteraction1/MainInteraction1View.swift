@@ -65,12 +65,14 @@ struct MainInteraction1View: View {
                             for i in 0...(spherosInteraction1.count - 1) {
                                 
                                 // Checks rotation of sphero i
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                                     
                                     checkIfSpheroHasRotated(bolt: SharedToyBox.instance.bolts[i]) {
                                         print(spherosInteraction1[i].name + " has rotated")
                                         SharedToyBox.instance.bolts[i].setMatrix(color: .red)
                                     }
+                                    
+                                    sleep(1)
                                 }
                                 
                             }
@@ -81,13 +83,24 @@ struct MainInteraction1View: View {
                             for i in 0...(spherosInteraction1.count - 1) {
                                 
                                 // Checks clashing of sphero i
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                                     
                                     checkIfSpheroHasClashed(bolt: SharedToyBox.instance.bolts[i]) {
                                         print(spherosInteraction1[i].name + " has clashed")
                                         drawLetterOnMatrix(letter: spherosInteraction1[i].bloodGroup, bolt: SharedToyBox.instance.bolts[i])
                                     }
+                                    
+                                    sleep(1)
                                 }
+                            }
+                        }
+                    }
+                    if (spherosThatClashed.count == spherosInteraction1.count) {
+                        Text("All spheros have clashed").onAppear {
+                            for i in 0...(spherosInteraction1.count - 1) {
+                                // removes data collection
+                                SharedToyBox.instance.bolts[i].sensorControl.disable()
+                                sleep(1)
                             }
                         }
                     }
@@ -96,10 +109,22 @@ struct MainInteraction1View: View {
                 // Emergency
                 VStack {
                     Button("Skip rotation") {
-                        print("TODO")
+                        for i in 0...(spherosInteraction1.count - 1) {
+                            spherosThatRotated.append(SharedToyBox.instance.bolts[i].identifier)
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                SharedToyBox.instance.bolts[i].setMatrix(color: .red)
+                            }
+                            sleep(1)
+                        }
                     }.padding()
                     Button("Skip clash") {
-                        print("TODO")
+                        for i in 0...(spherosInteraction1.count - 1) {
+                            spherosThatClashed.append(SharedToyBox.instance.bolts[i].identifier)
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                drawLetterOnMatrix(letter: spherosInteraction1[i].bloodGroup, bolt: SharedToyBox.instance.bolts[i])
+                            }
+                            sleep(1)
+                        }
                     }.padding()
                 }
             }
