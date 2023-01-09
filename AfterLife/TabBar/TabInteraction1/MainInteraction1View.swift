@@ -60,18 +60,20 @@ struct MainInteraction1View: View {
             
             if (isConnectedToSpheros) {
                 VStack {
-                    Text(String(spherosThatRotated.count) + "/" + String(spherosInteraction1.count) + " spheros rotated").onAppear {
-                        for i in 0...(spherosInteraction1.count - 1) {
-                            
-                            // Checks rotation of sphero i
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    if (spherosThatRotated.count != spherosInteraction1.count) {
+                        Text(String(spherosThatRotated.count) + "/" + String(spherosInteraction1.count) + " spheros rotated").onAppear {
+                            for i in 0...(spherosInteraction1.count - 1) {
                                 
-                                checkIfSpheroHasRotated(bolt: SharedToyBox.instance.bolts[i]) {
-                                    print(spherosInteraction1[i].name + " has rotated")
-                                    SharedToyBox.instance.bolts[i].setMatrix(color: .red)
+                                // Checks rotation of sphero i
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                    
+                                    checkIfSpheroHasRotated(bolt: SharedToyBox.instance.bolts[i]) {
+                                        print(spherosInteraction1[i].name + " has rotated")
+                                        SharedToyBox.instance.bolts[i].setMatrix(color: .red)
+                                    }
                                 }
+                                
                             }
-                            
                         }
                     }
                     if (spherosThatRotated.count == spherosInteraction1.count) {
@@ -79,7 +81,7 @@ struct MainInteraction1View: View {
                             for i in 0...(spherosInteraction1.count - 1) {
                                 
                                 // Checks clashing of sphero i
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                                     
                                     checkIfSpheroHasClashed(bolt: SharedToyBox.instance.bolts[i]) {
                                         print(spherosInteraction1[i].name + " has clashed")
@@ -90,6 +92,16 @@ struct MainInteraction1View: View {
                         }
                     }
                 }.padding()
+                
+                // Emergency
+                VStack {
+                    Button("Skip rotation") {
+                        print("TODO")
+                    }.padding()
+                    Button("Skip clash") {
+                        print("TODO")
+                    }.padding()
+                }
             }
         }
     }
