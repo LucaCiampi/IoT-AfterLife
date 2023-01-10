@@ -31,7 +31,8 @@ struct MainInteraction1View: View {
         SpheroInteraction1Struct(name: "SB-8C49", bloodGroup: "a"),
         SpheroInteraction1Struct(name: "SB-5D1C", bloodGroup: "b"),
         SpheroInteraction1Struct(name: "SB-42C1", bloodGroup: "o"),
-        SpheroInteraction1Struct(name: "SB-F682", bloodGroup: "ab")
+        SpheroInteraction1Struct(name: "SB-F682", bloodGroup: "ab"),
+        //SpheroInteraction1Struct(name: "SB-6C4C", bloodGroup: "a")
     ]
     
     @State var spherosThatRotated: [UUID] = []
@@ -112,28 +113,22 @@ struct MainInteraction1View: View {
                     Button("Skip rotation") {
                         for i in 0...(spherosInteraction1.count - 1) {
                             spherosThatRotated.append(SharedToyBox.instance.bolts[i].identifier)
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                                SharedToyBox.instance.bolts[i].setMatrix(color: .red)
-                            }
-                            sleep(1)
+                            SharedToyBox.instance.bolts[i].setMatrix(color: .red)
+                            print("set color red to bolt #" + String(i))
                         }
                     }.padding()
                     Button("Skip clash") {
                         for i in 0...(spherosInteraction1.count - 1) {
                             spherosThatClashed.append(SharedToyBox.instance.bolts[i].identifier)
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                                drawLetterOnMatrix(letter: spherosInteraction1[i].bloodGroup, bolt: SharedToyBox.instance.bolts[i])
-                            }
-                            sleep(1)
+                            drawLetterOnMatrix(letter: spherosInteraction1[i].bloodGroup, bolt: SharedToyBox.instance.bolts[i])
+                            print("displayed letter to bolt #" + String(i))
                         }
                     }.padding()
                     Button("Turn off") {
                         for i in 0...(spherosInteraction1.count - 1) {
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                                SharedToyBox.instance.bolts[i].clearMatrix()
-                                SharedToyBox.instance.bolts[i].sensorControl.disable()
-                            }
-                            sleep(1)
+                            SharedToyBox.instance.bolts[i].clearMatrix()
+                            SharedToyBox.instance.bolts[i].sensorControl.disable()
+                            print("disabled bolt #" + String(i))
                         }
                     }.padding()
                 }

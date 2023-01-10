@@ -78,10 +78,6 @@ struct MainInteraction2View: View {
                     }
                 }
                 
-                if let aaaa = data.verticalAcceleration {
-                    print(aaaa)
-                }
-                
                 if let gyro = data.gyro?.rotationRate {
                     // TOUJOURS PAS BIEN!!!
                     let rotationRate: double3 = [Double(gyro.x!)/2000.0, Double(gyro.y!)/2000.0, Double(gyro.z!)/2000.0]
