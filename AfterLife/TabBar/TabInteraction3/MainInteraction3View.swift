@@ -23,6 +23,7 @@ struct MainInteraction3View: View {
     var spheroInteraction2Name = "SB-5D1C"
     
     @State var currentHeading: Double = 0
+    @State var isSpheroRotating = false
     
     var body: some View {
         VStack {
@@ -89,6 +90,15 @@ struct MainInteraction3View: View {
                 }
             }.padding()
             
+            VStack {
+                Button("Spin") {
+                    MakeSpheroSpin()
+                }.padding()
+                Button("Stop") {
+                    StopSphero()
+                }
+            }
+            
             if (isShowingDetailView) {
                 VStack {
                     Text("currentHeading : " + String(format: "%.1f", currentHeading))
@@ -113,11 +123,16 @@ struct MainInteraction3View: View {
      Makes the sphero bolt rotate when placed in the pot
      */
     func MakeSpheroSpin() {
-        Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { _ in
-            currentHeading += 180.0
-            SharedToyBox.instance.bolt?.roll(heading: currentHeading, speed: 10)
-            print("MakeSpheroSpin")
-        })
+        //Timer.scheduledTimer(withTimeInterval: 0.2, repeats: true, block: { _ in
+            SharedToyBox.instance.bolt?.sendTurnCommand()
+        //})
+    }
+    
+    /**
+     Stops sphero movement
+     */
+    func StopSphero() {
+        SharedToyBox.instance.bolt?.sensorControl.disable()
     }
 }
 

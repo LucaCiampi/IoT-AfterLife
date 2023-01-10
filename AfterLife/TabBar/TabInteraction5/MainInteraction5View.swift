@@ -19,7 +19,6 @@ struct MainInteraction5View: View {
     @State var pokerSoundStatus = ""
     @State var pokerEsp32ReceivedMessage = ""
     
-    var esp32Interaction5Name = "rfid-luca"
     @State var player: AVAudioPlayer?
     
     var body: some View {
@@ -52,12 +51,11 @@ struct MainInteraction5View: View {
                 else {
                     Button("Make poker game sound") {
                         makePokerGameSound()
-                        pokerSoundStatus = "just played"
-                    }
-                    Text(pokerSoundStatus)
-                    Text(pokerEsp32ReceivedMessage).onAppear {
+                    }.onAppear {
                         bleInterface.listenForPokerEsp32()
                     }
+                    Text(pokerSoundStatus)
+                    Text(pokerEsp32ReceivedMessage)
                 }
             }.padding()
         }.onChange(of: bleInterface.connectionState, perform: { newValue in
@@ -85,7 +83,7 @@ struct MainInteraction5View: View {
                 connectionString = "No ESP32 connected"
             }
         }).onChange(of: bleInterface.pokerDataReceived, perform: { newValue in
-            pokerEsp32ReceivedMessage = bleInterface.pokerDataReceived[0].content + " just badged !"
+            pokerEsp32ReceivedMessage = (bleInterface.pokerDataReceived.last?.content ?? "nothing") + " just badged !"
             makePokerGameSound()
         })
         .padding()
