@@ -31,6 +31,10 @@ class SpheroV2Toy: Toy, SensorControlProvider, Aimable, Collidable, DriveRollabl
         core.send(RawMotorV2(leftMotorPower: 0, leftMotorMode: .forward, rightMotorPower: 255, rightMotorMode: .forward))
     }
     
+    func stopTurnCommand() {
+        core.send(RawMotorV2(leftMotorPower: 0, leftMotorMode: .forward, rightMotorPower: 0, rightMotorMode: .forward))
+    }
+    
     override var peripheral: CBPeripheral? {
         return core.peripheral
     }

@@ -19,8 +19,8 @@ struct MainInteraction3View: View {
     @State var spheroConnectionString = "No sphero connected"
     @State var isConnectedToSphero = false
     
-    var esp32Interaction3Name = "rfid-luca"
-    var spheroInteraction2Name = "SB-5D1C"
+    var spheroInteraction3Name = "SB-5D1C"
+    var incompatibleSpheroInteraction3Name = "SB-8C49"
     
     @State var currentHeading: Double = 0
     @State var isSpheroRotating = false
@@ -42,7 +42,7 @@ struct MainInteraction3View: View {
                                 isScanningDevices = !isScanningDevices
                                 if (isScanningDevices) {
                                     scanButtonString = "Stop scan"
-                                    bleInterface.connectToPeriphWithName(name: esp32Interaction3Name)
+                                    bleInterface.connectToInteraction3Esp32()
                                 }
                                 else {
                                     scanButtonString = "Start scan"
@@ -78,12 +78,15 @@ struct MainInteraction3View: View {
                 })
                 VStack {
                     Text(spheroConnectionString)
-                    Button("Connect to sphero " + spheroInteraction2Name) {
-                        SharedToyBox.instance.searchForBoltsNamed([spheroInteraction2Name]) { err in
+                    Button("Connect to spheros") {
+                        SharedToyBox.instance.searchForBoltsNamed([spheroInteraction3Name, incompatibleSpheroInteraction3Name]) { err in
                             if err == nil {
-                                self.spheroConnectionString = "Connected to " + spheroInteraction2Name
+                                self.spheroConnectionString = "Connected to spheros"
                                 isConnectedToSphero = true
-                                ActivateSpheroSensors()
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                    ActivateSpheroSensors(boltId: 0)
+                                    ActivateSpheroSensors(boltId: 1)
+                                }
                             }
                         }
                     }
@@ -91,19 +94,40 @@ struct MainInteraction3View: View {
             }.padding()
             
             VStack {
-                Button("Spin") {
-                    MakeSpheroSpin()
-                }.padding()
-                Button("Stop") {
-                    StopSphero()
+                HStack {
+                    Button("Spin compatible") {
+                        MakeSpheroSpin(boltId: 0)
+                    }.padding()
+                    Button("Stop compatible") {
+                        StopSphero(boltId: 0)
+                    }
+                }
+                HStack {
+                    Button("Spin uncompatible") {
+                        MakeSpheroSpin(boltId: 1)
+                    }.padding()
+                    Button("Stop uncompatible") {
+                        StopSphero(boltId: 1)
+                    }
                 }
             }
             
             if (isShowingDetailView) {
                 VStack {
-                    Text("currentHeading : " + String(format: "%.1f", currentHeading))
-                }.onChange(of: isConnectedToSphero) { newValue in
-                    MakeSpheroSpin()
+                    Text(bleInterface.cuveDataReceived.last?.content ?? "silence")
+                }.onAppear {
+                    bleInterface.listenForCuveEsp32()
+                }.onChange(of: bleInterface.cuveDataReceived.last?.content) { newValue in
+                    if (newValue == "spin") {
+                        MakeSpheroSpin(boltId: 0)
+                    }
+                    else if (newValue == "pump") {
+                        MakeSpheroSpin(boltId: 1)
+                        //ActivatePump()
+                    }
+                    else {
+                        print("message de l'ESP32 de la cuve non conforme")
+                    }
                 }.padding()
             }
         }
@@ -113,26 +137,24 @@ struct MainInteraction3View: View {
     /**
      Init parameters before moving the sphero bolt
      */
-    func ActivateSpheroSensors() {
-        SharedToyBox.instance.bolt?.sensorControl.enable(sensors: SensorMask.init(arrayLiteral: .accelerometer))
-        SharedToyBox.instance.bolt?.sensorControl.interval = 1
-        SharedToyBox.instance.bolt?.setStabilization(state: SetStabilization.State.off)
+    func ActivateSpheroSensors(boltId: Int) {
+        //SharedToyBox.instance.bolts[boltId].sensorControl.enable(sensors: SensorMask.init(arrayLiteral: .accelerometer))
+        //SharedToyBox.instance.bolts[boltId].sensorControl.interval = 1
+        SharedToyBox.instance.bolts[boltId].setStabilization(state: SetStabilization.State.off)
     }
     
     /**
      Makes the sphero bolt rotate when placed in the pot
      */
-    func MakeSpheroSpin() {
-        //Timer.scheduledTimer(withTimeInterval: 0.2, repeats: true, block: { _ in
-            SharedToyBox.instance.bolt?.sendTurnCommand()
-        //})
+    func MakeSpheroSpin(boltId: Int) {
+        SharedToyBox.instance.bolts[boltId].sendTurnCommand()
     }
     
     /**
      Stops sphero movement
      */
-    func StopSphero() {
-        SharedToyBox.instance.bolt?.sensorControl.disable()
+    func StopSphero(boltId: Int) {
+        SharedToyBox.instance.bolts[boltId].stopTurnCommand()
     }
 }
 

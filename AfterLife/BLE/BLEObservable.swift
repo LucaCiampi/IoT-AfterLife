@@ -34,13 +34,12 @@ class BLEObservable: ObservableObject {
     @Published var glassesDataReceived: [DataReceived] = []
     
     // Interaction 3
-    @Published var cuveButton1Pressed: Bool = false
-    @Published var cuveButton2Pressed: Bool = false
+    @Published var cuveDataReceived: [DataReceived] = []
     
     // Interaction 4
     @Published var djiButtonPressed: Bool = false
     
-    // Interaction 5 (maybe replace it with a boolean)
+    // Interaction 5
     @Published var pokerDataReceived: [DataReceived] = []
     
     
@@ -119,6 +118,19 @@ class BLEObservable: ObservableObject {
     /**
      Listens for messages on the "readAccelerometerCBUUID" constant
      */
+    func listenForCuveEsp32() {
+        BLEManager.instance.listenForCuveEsp32() { data in
+            if let d = data,
+               let s = String(data: d, encoding: .utf8){
+                print(DataReceived(content: s))
+                self.cuveDataReceived.append(DataReceived(content: s))
+            }
+        }
+    }
+    
+    /**
+     Listens for messages on the "readAccelerometerCBUUID" constant
+     */
     func listenForPokerEsp32() {
         BLEManager.instance.listenForPokerEsp32() { data in
             if let d = data,
@@ -135,8 +147,8 @@ class BLEObservable: ObservableObject {
      */
     func connectToInteraction3Esp32() {
         BLEManager.instance.scan { p, pname in
-            var periph = Periph(blePeriph: p, name: pname)
-            if periph.name == "rfid-luca" {
+            let periph = Periph(blePeriph: p, name: pname)
+            if periph.name == "cuve-esp" {
                 self.connectTo(p: periph)
             }
         }

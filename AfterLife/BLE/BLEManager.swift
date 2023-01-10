@@ -8,7 +8,12 @@ class BLEManager: NSObject {
     var isBLEEnabled = false
     var isScanning = false
     
-    // Interaction 5 - poker
+    // Interaction 3 - Cuve
+    let cuveAuthCBUUID = CBUUID(string: "CC140D37-A95D-46E4-AC14-D8B815B3273F")
+    let cuveWriteCBUUID = CBUUID(string: "C715259B-5AAC-4341-ABC2-C8EA4E23C058")
+    let cuveReadCBUUID = CBUUID(string: "3DE6F23F-AFAF-4B91-AB89-1B0D78B33E56")
+    
+    // Interaction 5 - Poker
     let pokerAuthCBUUID = CBUUID(string: "839B01C2-2F62-434F-82B8-670D7057AB98")
     let pokerWriteCBUUID = CBUUID(string: "4AA55938-382F-455E-B447-0C3676B8910F")
     let pokerReadCBUUID = CBUUID(string: "78CB0348-462A-441B-916F-320BC21DAF73")
@@ -17,6 +22,7 @@ class BLEManager: NSObject {
     let pokerBisWriteCBUUID = CBUUID(string: "19BF94C5-3219-4433-967C-CB29CBF2B173")
     let pokerBisReadCBUUID = CBUUID(string: "19BF94C5-3219-4433-967C-CB29CBF2B173")
     
+    var messageReceivedCallbackCuveEsp32: ((Data?)->())?
     var messageReceivedCallbackPokerEsp32: ((Data?)->())?
     var sendDataCallbackPokerEsp32: ((String?) -> ())?
     
@@ -58,6 +64,13 @@ class BLEManager: NSObject {
     
     func listenForMessages(callback:@escaping(Data?)->()) {
         messageReceivedCallback = callback
+    }
+    
+    /**
+     Interaction 3 cuve listen for messages
+     */
+    func listenForCuveEsp32(callback:@escaping(Data?)->()) {
+        messageReceivedCallbackCuveEsp32 = callback
     }
     
     /**
@@ -194,11 +207,10 @@ extension BLEManager: CBCentralManagerDelegate {
             print("Message recieved from poker ESP32")
             messageReceivedCallbackPokerEsp32?(characteristic.value)
         }
-        // TODO: implement other characteristics
-        /*else if characteristic == getCharForUUID(pokerReadCBUUID, forperipheral: peripheral) {
-            print("Message recieved from cities")
-            messageReceivedCallbackCities?(characteristic.value)
-        }*/
+        else if characteristic == getCharForUUID(cuveReadCBUUID, forperipheral: peripheral) {
+            print("Message recieved from cuve ESP32")
+            messageReceivedCallbackCuveEsp32?(characteristic.value)
+        }
         else {
             print("Message recieved from unknown UUID")
             messageReceivedCallback?(characteristic.value)
