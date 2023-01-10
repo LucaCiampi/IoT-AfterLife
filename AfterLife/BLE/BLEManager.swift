@@ -12,6 +12,11 @@ class BLEManager: NSObject {
     let pokerAuthCBUUID = CBUUID(string: "839B01C2-2F62-434F-82B8-670D7057AB98")
     let pokerWriteCBUUID = CBUUID(string: "4AA55938-382F-455E-B447-0C3676B8910F")
     let pokerReadCBUUID = CBUUID(string: "78CB0348-462A-441B-916F-320BC21DAF73")
+    
+    let pokerBisAuthCBUUID = CBUUID(string: "FDA6ADC0-D568-4586-ADE5-63F21168428D")
+    let pokerBisWriteCBUUID = CBUUID(string: "19BF94C5-3219-4433-967C-CB29CBF2B173")
+    let pokerBisReadCBUUID = CBUUID(string: "19BF94C5-3219-4433-967C-CB29CBF2B173")
+    
     var messageReceivedCallbackPokerEsp32: ((Data?)->())?
     var sendDataCallbackPokerEsp32: ((String?) -> ())?
     

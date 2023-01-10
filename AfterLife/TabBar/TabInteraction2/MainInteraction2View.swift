@@ -17,7 +17,7 @@ struct MainInteraction2View: View {
     @State var isScanningDevices = false
     @State var isShowingDetailView = false
     
-    var spheroInteraction2Name = "SB-5D1C"
+    var spheroInteraction2Name = "SB-2020"
     
     @State var spheroMovementString = "Lever hasn't been activated"
     @State var spheroHasMoved = false
