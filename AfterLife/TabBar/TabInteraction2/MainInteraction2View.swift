@@ -42,7 +42,7 @@ struct MainInteraction2View: View {
             if (isShowingDetailView) {
                 Text(spheroHasMoved ? "Lever has been activated" : "Lever hasn't been activated").onAppear {
                     if (!spheroHasMoved) {
-                        self.retrieveSpheroMovements(boltId: 0)
+                        self.retrieveSpheroMovements(boltId: (0))
                     }
                 }.onChange(of: spheroHasMoved) { newValue in
                     startVideo = true

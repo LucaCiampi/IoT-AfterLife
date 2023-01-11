@@ -184,7 +184,7 @@ public class CommandSequencerV2 {
         if currentData.count == 0 {
             if byte != APIV2Constants.startOfPacket {
                 skippedData = true
-                print("current data was empty but first byte was not SOP")
+                //print("current data was empty but first byte was not SOP")
                 return
             }
         }
