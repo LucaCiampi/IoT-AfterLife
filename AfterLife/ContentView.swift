@@ -52,12 +52,12 @@ struct ContentView: View {
                     let item = AVPlayerItem(url: videoUrl)
                     player.replaceCurrentItem(with: item)
                 }
-                DispatchQueue.main.asyncAfter(deadline: .now(), execute: {
-                    player.preventsDisplaySleepDuringVideoPlayback = true
-                })
+                player.preventsDisplaySleepDuringVideoPlayback = true
             }
             .onChange(of: startVideo, perform: { newValue in
-                player.play()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
+                    player.play()
+                })
             })
             .edgesIgnoringSafeArea(.all)
     }
