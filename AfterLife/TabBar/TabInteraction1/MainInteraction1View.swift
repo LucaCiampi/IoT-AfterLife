@@ -34,8 +34,8 @@ struct MainInteraction1View: View {
     
     var spherosInteraction1 = [
         SpheroInteraction1Struct(name: "SB-8C49", bloodGroup: "a"),
-        //SpheroInteraction1Struct(name: "SB-5D1C", bloodGroup: "b"),
-        //SpheroInteraction1Struct(name: "SB-42C1", bloodGroup: "o"),
+        SpheroInteraction1Struct(name: "SB-5D1C", bloodGroup: "b"),
+        SpheroInteraction1Struct(name: "SB-42C1", bloodGroup: "o"),
         SpheroInteraction1Struct(name: "SB-0994", bloodGroup: "a"),
         SpheroInteraction1Struct(name: "SB-F682", bloodGroup: "ab")
     ]
@@ -137,7 +137,7 @@ struct MainInteraction1View: View {
                     // Rotation
                     if (spherosThatRotated.count != spherosInteraction1.count) {
                         if (!spherosRotationReady) {
-                            Text("Loading spheros rotation").onAppear {
+                            Text("Loading spheros rotation...").onAppear {
                                 checkAllSpherosRotation()
                             }
                         }
@@ -149,7 +149,7 @@ struct MainInteraction1View: View {
                     // Clash
                     if (spherosThatRotated.count == spherosInteraction1.count) {
                         if (!spherosClashingReady) {
-                            Text("Loading spheros clashing").onAppear {
+                            Text("Loading spheros clashing...").onAppear {
                                 checkAllSpherosClash()
                             }
                         }
@@ -376,6 +376,7 @@ struct MainInteraction1View: View {
                 spherosThatClashed.append(SharedToyBox.instance.bolts[i].identifier)
                 SharedToyBox.instance.bolts[i].setMatrix(color: .red)
                 drawLetterOnMatrix(letter: spherosInteraction1[i].bloodGroup, bolt: SharedToyBox.instance.bolts[i])
+                bleInterface.sendMessageToVerresESP32(message: spherosInteraction1[i].bloodGroup)
                 print("Forced displaying letter to bolt #" + String(i))
             }
         }
@@ -387,6 +388,9 @@ struct MainInteraction1View: View {
     func spherosOff() {
         spherosThatRotated = []
         spherosThatClashed = []
+        
+        spherosRotationReady = false
+        spherosClashingReady = false
         
         for i in 0...(spherosInteraction1.count - 1) {
             SharedToyBox.instance.bolts[i].clearMatrix()
