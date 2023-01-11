@@ -27,20 +27,20 @@ struct MainInteraction1View: View {
     @State var isScanningDevices = false
     @State var isConnectedToEsp = false
     
+    // Sphero barman
+    let spheroTemoinBarmanName = "SB-8C49"
+    @State var isConnectedToTemoinSphero = false
     
     // Spheros
     @State var isConnectedToSpheros = false
     @State var spheroConnectionString = "No sphero connected"
     
-    var spherosInteraction1 = [
-        SpheroInteraction1Struct(name: "SB-8C49", bloodGroup: "a"),
+    let spherosInteraction1 = [
         SpheroInteraction1Struct(name: "SB-5D1C", bloodGroup: "b"),
         SpheroInteraction1Struct(name: "SB-42C1", bloodGroup: "o"),
         SpheroInteraction1Struct(name: "SB-0994", bloodGroup: "a"),
         SpheroInteraction1Struct(name: "SB-F682", bloodGroup: "ab")
     ]
-    
-    //var spheroInteraction2Name = "SB-2020"
     
     @State var spherosThatRotated: [UUID] = []
     @State var spherosThatClashed: [UUID] = []
@@ -50,6 +50,8 @@ struct MainInteraction1View: View {
     
     var body: some View {
         VStack {
+            
+            // Sphero
             VStack {
                 Text(spheroConnectionString)
                 Button(!isConnectedToSpheros ? "Connect to spheros" : "Disconnect from spheros") {
@@ -74,57 +76,88 @@ struct MainInteraction1View: View {
                         spheroConnectionString = "No sphero connected"
                     }
                 }
-                VStack {
-                    Text(connectionString)
-                    
-                    if bleInterface.connectedPeripheral != nil {
-                        Button("Disconnect") {
-                            bleInterface.disconnectFrom(p: bleInterface.connectedPeripheral!)
-                        }
+            }
+            
+            // ESP32
+            VStack {
+                Text(connectionString)
+                
+                if bleInterface.connectedPeripheral != nil {
+                    Button("Disconnect") {
+                        bleInterface.disconnectFrom(p: bleInterface.connectedPeripheral!)
                     }
-                    
-                    HStack {
-                        if (!isConnectedToEsp) {
-                            Button(scanButtonString) {
-                                isScanningDevices = !isScanningDevices
-                                if (isScanningDevices) {
-                                    scanButtonString = "Stop scan"
-                                    bleInterface.connectToInteraction1Esp32()
-                                }
-                                else {
-                                    scanButtonString = "Start scan"
-                                    bleInterface.stopScan()
-                                }
+                }
+                
+                HStack {
+                    if (!isConnectedToEsp) {
+                        Button(scanButtonString) {
+                            isScanningDevices = !isScanningDevices
+                            if (isScanningDevices) {
+                                scanButtonString = "Stop scan"
+                                bleInterface.connectToInteraction1Esp32()
+                            }
+                            else {
+                                scanButtonString = "Start scan"
+                                bleInterface.stopScan()
                             }
                         }
-                    }.onChange(of: bleInterface.connectedPeripheral, perform: { newValue in
-                        if let p = newValue {
-                            connectionString = p.name
-                            isConnectedToEsp = true
-                        }
-                        else {
-                            connectionString = "No ESP32 connected"
-                            isConnectedToEsp = false
-                        }
-                    }).onChange(of: bleInterface.connectionState, perform: { newValue in
-                        switch newValue {
-                        case .disconnected:
-                            break
-                        case .connecting:
-                            connectionString = "Connecting... "
-                            break
-                        case .discovering:
-                            connectionString = "Discovering... "
-                            break
-                        case .ready:
-                            connectionString = "Connected to " + connectionString
-                            break
-                            
-                        }
-                    })
-                }.padding()
+                    }
+                }.onChange(of: bleInterface.connectedPeripheral, perform: { newValue in
+                    if let p = newValue {
+                        connectionString = p.name
+                        isConnectedToEsp = true
+                    }
+                    else {
+                        connectionString = "No ESP32 connected"
+                        isConnectedToEsp = false
+                    }
+                }).onChange(of: bleInterface.connectionState, perform: { newValue in
+                    switch newValue {
+                    case .disconnected:
+                        break
+                    case .connecting:
+                        connectionString = "Connecting... "
+                        break
+                    case .discovering:
+                        connectionString = "Discovering... "
+                        break
+                    case .ready:
+                        connectionString = "Connected to " + connectionString
+                        break
+                        
+                    }
+                })
             }.padding()
+            
+            // Sphero barman
+            VStack {
+                Text("IPHONE 2 ONLY")
+                Button(!isConnectedToTemoinSphero ? "Connect to témoin" : "Disconnect from témoin") {
+                    if (!isConnectedToTemoinSphero) {
+                        print("Connection to témoin")
+                        SharedToyBox.instance.searchForBoltsNamed([spheroTemoinBarmanName]) { err in
+                            if err == nil {
+                                isConnectedToTemoinSphero = true
+                                drawSpheroTemoin()
+                            }
+                            else {
+                                print("erreur connexion sphero témoin")
+                            }
+                        }
+                    }
+                    else {
+                        SharedToyBox.instance.bolts.forEach { bolt in
+                            SharedToyBox.instance.box.disconnect(toy: bolt)
+                        }
+                        SharedToyBox.instance.boltsNames = []
+                        isConnectedToTemoinSphero = false
+                        spheroConnectionString = "No sphero connected"
+                    }
+                }
+            }
+            
             /*
+             // Help
              HStack {
              Button("send to esp") {
              bleInterface.sendMessageToVerresESP32(message: "a")
@@ -396,6 +429,25 @@ struct MainInteraction1View: View {
             SharedToyBox.instance.bolts[i].clearMatrix()
             SharedToyBox.instance.bolts[i].sensorControl.disable()
             print("disabled bolt #" + String(i))
+        }
+    }
+    
+    /**
+     Draws letter on barman's glass
+     */
+    func drawSpheroTemoin() {
+        if let bolt = SharedToyBox.instance.bolt {
+            bolt.setMatrix(color: .red)
+            drawLetterOnMatrix(letter: "a", bolt: bolt)
+        }
+    }
+    
+    /**
+     Clear barman's glass
+     */
+    func clearSpheroTemoinScreen() {
+        if let bolt = SharedToyBox.instance.bolt {
+            bolt.clearMatrix()
         }
     }
 }

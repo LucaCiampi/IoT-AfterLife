@@ -25,6 +25,7 @@ struct MainInteraction2View: View {
     
     var body: some View {
         VStack {
+            Text("iPad ONLY zone")
             Text(connectionString)
             Button("Connect to sphero " + spheroInteraction2Name) {
                 SharedToyBox.instance.searchForBoltsNamed([spheroInteraction2Name]) { err in
