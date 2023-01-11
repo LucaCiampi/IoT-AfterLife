@@ -23,13 +23,15 @@ struct MainInteraction1View: View {
     
     // ESP32
     @State var connectionString = "No device connected"
+    @State var scanButtonString = "Start scan"
     @State var isScanningDevices = false
-    @State var isConnectedToSpheros = false
+    @State var isConnectedToEsp = false
+    
     
     // Spheros
     var spherosInteraction1 = [
         SpheroInteraction1Struct(name: "SB-8C49", bloodGroup: "a"),
-        SpheroInteraction1Struct(name: "SB-5D1C", bloodGroup: "b"),
+        //SpheroInteraction1Struct(name: "SB-5D1C", bloodGroup: "b"),
         SpheroInteraction1Struct(name: "SB-42C1", bloodGroup: "o"),
         SpheroInteraction1Struct(name: "SB-F682", bloodGroup: "ab"),
         SpheroInteraction1Struct(name: "SB-0994", bloodGroup: "a")
@@ -40,6 +42,7 @@ struct MainInteraction1View: View {
     @State var spherosThatRotated: [UUID] = []
     @State var spherosThatClashed: [UUID] = []
     
+    @State var isConnectedToSpheros = false
     @State var spheroConnectionString = "No sphero connected"
     
     var body: some View {
@@ -47,7 +50,8 @@ struct MainInteraction1View: View {
             VStack {
                 Text(spheroConnectionString)
                 Button("Connect to spheros") {
-                    SharedToyBox.instance.searchForBoltsNamed([spherosInteraction1[0].name, spherosInteraction1[1].name, spherosInteraction1[2].name, spherosInteraction1[3].name, spherosInteraction1[4].name, spheroInteraction2Name]) { err in
+                    //SharedToyBox.instance.searchForBoltsNamed([spherosInteraction1[0].name, spherosInteraction1[1].name, spherosInteraction1[2].name, spherosInteraction1[3].name, spherosInteraction1[4].name, spheroInteraction2Name])
+                    SharedToyBox.instance.searchForBoltsNamed([spherosInteraction1[0].name, spherosInteraction1[1].name, spherosInteraction1[2].name, spherosInteraction1[3].name]) { err in
                         if err == nil {
                             self.spheroConnectionString = "Connected to " + String(spherosInteraction1.count) + " spheros"
                             isConnectedToSpheros = true
@@ -57,7 +61,62 @@ struct MainInteraction1View: View {
                         }
                     }
                 }
+                VStack {
+                    Text(connectionString)
+                    
+                    if bleInterface.connectedPeripheral != nil {
+                        Button("Disconnect") {
+                            bleInterface.disconnectFrom(p: bleInterface.connectedPeripheral!)
+                        }
+                    }
+                    
+                    HStack {
+                        if (!isConnectedToEsp) {
+                            Button(scanButtonString) {
+                                isScanningDevices = !isScanningDevices
+                                if (isScanningDevices) {
+                                    scanButtonString = "Stop scan"
+                                    bleInterface.connectToInteraction1Esp32()
+                                }
+                                else {
+                                    scanButtonString = "Start scan"
+                                    bleInterface.stopScan()
+                                }
+                            }
+                        }
+                    }.onChange(of: bleInterface.connectedPeripheral, perform: { newValue in
+                        if let p = newValue {
+                            connectionString = p.name
+                            isConnectedToEsp = true
+                        }
+                        else {
+                            connectionString = "No ESP32 connected"
+                            isConnectedToEsp = false
+                        }
+                    }).onChange(of: bleInterface.connectionState, perform: { newValue in
+                        switch newValue {
+                        case .disconnected:
+                            break
+                        case .connecting:
+                            connectionString = "Connecting... "
+                            break
+                        case .discovering:
+                            connectionString = "Discovering... "
+                            break
+                        case .ready:
+                            connectionString = "Connected to " + connectionString
+                            break
+                            
+                        }
+                    })
+                }.padding()
             }.padding()
+            
+            HStack {
+                Button("send to esp") {
+                    bleInterface.sendMessageToVerresESP32(message: "a")
+                }
+            }
             
             if (isConnectedToSpheros) {
                 VStack {
@@ -89,6 +148,7 @@ struct MainInteraction1View: View {
                                     checkIfSpheroHasClashed(bolt: SharedToyBox.instance.bolts[i]) {
                                         print(spherosInteraction1[i].name + " has clashed")
                                         drawLetterOnMatrix(letter: spherosInteraction1[i].bloodGroup, bolt: SharedToyBox.instance.bolts[i])
+                                        bleInterface.sendMessageToVerresESP32(message: spherosInteraction1[i].bloodGroup)
                                     }
                                     
                                     sleep(1)
@@ -122,6 +182,9 @@ struct MainInteraction1View: View {
                             drawLetterOnMatrix(letter: spherosInteraction1[i].bloodGroup, bolt: SharedToyBox.instance.bolts[i])
                             print("displayed letter to bolt #" + String(i))
                         }
+                    }.padding()
+                    Button("Turn lights off") {
+                        bleInterface.sendMessageToVerresESP32(message: "off")
                     }.padding()
                     Button("Turn off") {
                         for i in 0...(spherosInteraction1.count - 1) {

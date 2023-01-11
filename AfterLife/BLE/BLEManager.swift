@@ -8,6 +8,10 @@ class BLEManager: NSObject {
     var isBLEEnabled = false
     var isScanning = false
     
+    // Interaction 1
+    let verresAuthCBUUID = CBUUID(string: "7B095F51-0ED3-432C-9E82-86CBABBEE2E5")
+    let verresWriteCBUUID = CBUUID(string: "83810EDF-3840-4D41-B0ED-BD249D0FAA61")
+    
     // Interaction 3 - Cuve
     let cuveAuthCBUUID = CBUUID(string: "CC140D37-A95D-46E4-AC14-D8B815B3273F")
     let cuveWriteCBUUID = CBUUID(string: "C715259B-5AAC-4341-ABC2-C8EA4E23C058")
@@ -22,9 +26,13 @@ class BLEManager: NSObject {
     let pokerBisWriteCBUUID = CBUUID(string: "19BF94C5-3219-4433-967C-CB29CBF2B173")
     let pokerBisReadCBUUID = CBUUID(string: "F4C8EE2A-8686-46C1-8CD3-06C263BFEB7D")
     
+    var messageReceivedCallback: ((Data?)->())?
     var messageReceivedCallbackCuveEsp32: ((Data?)->())?
     var messageReceivedCallbackPokerEsp32: ((Data?)->())?
+    
+    var sendDataCallback: ((String?) -> ())?
     var sendDataCallbackPokerEsp32: ((String?) -> ())?
+    var sendDataCallbackVerresEsp32: ((String?) -> ())?
     
     var centralManager: CBCentralManager?
     var connectedPeripherals = [CBPeripheral]()
@@ -35,10 +43,7 @@ class BLEManager: NSObject {
     var disconnectCallback: ((CBPeripheral) -> ())?
     var didFinishDiscoveryCallback: ((CBPeripheral) -> ())?
     var globalDisconnectCallback: ((CBPeripheral) -> ())?
-    
-    var sendDataCallback: ((String?) -> ())?
-    
-    var messageReceivedCallback: ((Data?)->())?
+
     
     override init() {
         super.init()
@@ -139,6 +144,18 @@ class BLEManager: NSObject {
         }
     }
     
+    /**
+     Interaction 5 sending messages
+     */
+    func sendDataToVerresESP(data: Data, callback: @escaping (String?) -> ()) {
+        sendDataCallbackVerresEsp32 = callback
+        for periph in readyPeripherals {
+            if let char = BLEManager.instance.getCharForUUID(verresWriteCBUUID, forperipheral: periph) {
+                periph.writeValue(data, for: char, type: CBCharacteristicWriteType.withResponse)
+            }
+        }
+    }
+    
     func readData() {
         for periph in readyPeripherals {
             //if let char = BLEManager.instance.getCharForUUID(readCBUUID, forperipheral: periph) {
@@ -229,6 +246,10 @@ extension BLEManager: CBCentralManagerDelegate {
         else if characteristic == getCharForUUID(pokerBisWriteCBUUID, forperipheral: peripheral) {
             print("Message sent to poker ESP32 bis")
             sendDataCallbackPokerEsp32?(peripheral.name)
+        }
+        else if characteristic == getCharForUUID(verresWriteCBUUID, forperipheral: peripheral) {
+            print("Message sent to verres ESP32")
+            sendDataCallbackVerresEsp32?(peripheral.name)
         }
         else {
             print("Message sent to unknown UUID")

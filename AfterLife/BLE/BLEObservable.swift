@@ -165,6 +165,18 @@ class BLEObservable: ObservableObject {
     }
     
     /**
+     Connects the the ESP32 managing the interaction 1
+     */
+    func connectToInteraction1Esp32() {
+        BLEManager.instance.scan { p, pname in
+            let periph = Periph(blePeriph: p, name: pname)
+            if periph.name == "verres-led-esp" {
+                self.connectTo(p: periph)
+            }
+        }
+    }
+    
+    /**
      Connects the the ESP32 managing the interaction 3 which is the sphero bolt in a cuve
      TODO: change this for UUID in BLEManager
      */
@@ -215,6 +227,22 @@ class BLEObservable: ObservableObject {
         }
         else {
             print("Could not send data")
+        }
+    }
+    
+    /**
+     Sends a message to the verres ESP32
+     */
+    func sendMessageToVerresESP32(message: String) {
+        if let messageToSend: Data = message.data(using: .utf8) {
+            print("Sent : " + message + " to verres esp32")
+            //self.appendToHistory(text: "Sent : " + message)
+            BLEManager.instance.sendDataToVerresESP(data: messageToSend) { returnMessage in
+                print(returnMessage ?? "no return message")
+            }
+        }
+        else {
+            print("Could not send data to verres esp32")
         }
     }
     
