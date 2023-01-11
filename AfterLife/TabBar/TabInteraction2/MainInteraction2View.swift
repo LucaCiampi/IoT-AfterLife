@@ -12,17 +12,16 @@ import AVKit
 struct MainInteraction2View: View {
     
     @EnvironmentObject var bleInterface: BLEObservable
+    @Binding public var showModal: Bool
+    @Binding public var startVideo: Bool
     
     @State var connectionString = "No device connected"
     @State var isScanningDevices = false
     @State var isShowingDetailView = false
     
-    var spheroInteraction2Name = "SB-2020"
+    let spheroInteraction2Name = "SB-2020"
     
-    @State var spheroMovementString = "Lever hasn't been activated"
     @State var spheroHasMoved = false
-    
-    let videoUrl = Bundle.main.url(forResource: "test", withExtension: "mp4")!
     
     var body: some View {
         VStack {
@@ -34,37 +33,30 @@ struct MainInteraction2View: View {
                         isShowingDetailView = true
                     }
                 }
-            }
+            }.padding()
+            
+            Button("Go full screen") {
+                showModal = true
+            }.padding()
             
             if (isShowingDetailView) {
-                VStack {
-                    Text(spheroMovementString).onAppear {
-                        if (!spheroHasMoved) {
-                            self.retrieveSpheroMovements()
-                        }
+                Text(spheroHasMoved ? "Lever has been activated" : "Lever hasn't been activated").onAppear {
+                    if (!spheroHasMoved) {
+                        self.retrieveSpheroMovements(boltId: 0)
                     }
                 }.onChange(of: spheroHasMoved) { newValue in
-                    spheroMovementString = "Lever has been activated !"
+                    startVideo = true
                 }
             }
-            if (spheroHasMoved) {
-                HStack {
-                    VideoPlayer(player: AVPlayer(url: videoUrl))
-                }
-            }
-            
         }
         .padding()
     }
     
-    func retrieveSpheroMovements() {
-        var currentAccData = [Double]()
-        var currentGyroData = [Double]()
-        
-        SharedToyBox.instance.bolt?.sensorControl.enable(sensors: SensorMask.init(arrayLiteral: .accelerometer,.gyro))
-        SharedToyBox.instance.bolt?.sensorControl.interval = 1
-        SharedToyBox.instance.bolt?.setStabilization(state: SetStabilization.State.off)
-        SharedToyBox.instance.bolt?.sensorControl.onDataReady = { data in
+    func retrieveSpheroMovements(boltId: Int) {
+        SharedToyBox.instance.bolts[boltId].sensorControl.enable(sensors: SensorMask.init(arrayLiteral: .accelerometer,.gyro))
+        SharedToyBox.instance.bolts[boltId].sensorControl.interval = 1
+        SharedToyBox.instance.bolts[boltId].setStabilization(state: SetStabilization.State.off)
+        SharedToyBox.instance.bolts[boltId].sensorControl.onDataReady = { data in
             
             DispatchQueue.main.async {
                 if let acceleration = data.accelerometer?.filteredAcceleration {
@@ -73,29 +65,19 @@ struct MainInteraction2View: View {
                     let absSum = abs(acceleration.x!)+abs(acceleration.y!)+abs(acceleration.z!)
                     
                     if absSum > 1.7 {
-                        print("Secousse")
+                        print("Lever activated")
                         spheroHasMoved = true
+                        // v ?
+                        SharedToyBox.instance.bolts[boltId].sensorControl.disable()
                     }
                 }
-                
-                if let gyro = data.gyro?.rotationRate {
-                    // TOUJOURS PAS BIEN!!!
-                    let rotationRate: double3 = [Double(gyro.x!)/2000.0, Double(gyro.y!)/2000.0, Double(gyro.z!)/2000.0]
-                    currentGyroData.append(contentsOf: [Double(gyro.x!), Double(gyro.y!), Double(gyro.z!)])
-                }
+                /*
+                 if let gyro = data.gyro?.rotationRate {
+                 // TOUJOURS PAS BIEN!!!
+                 let rotationRate: double3 = [Double(gyro.x!)/2000.0, Double(gyro.y!)/2000.0, Double(gyro.z!)/2000.0]
+                 }
+                 */
             }
         }
-        
-    }
-    
-    func playVideo() {
-        //TODO
-    }
-}
-
-
-struct MainInteraction2View_Previews: PreviewProvider {
-    static var previews: some View {
-        MainInteraction2View()
     }
 }

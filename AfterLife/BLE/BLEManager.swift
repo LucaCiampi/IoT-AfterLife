@@ -207,6 +207,10 @@ extension BLEManager: CBCentralManagerDelegate {
             print("Message recieved from poker ESP32")
             messageReceivedCallbackPokerEsp32?(characteristic.value)
         }
+        else if characteristic == getCharForUUID(pokerBisReadCBUUID, forperipheral: peripheral) {
+            print("Message recieved from poker ESP32 bis")
+            messageReceivedCallbackPokerEsp32?(characteristic.value)
+        }
         else if characteristic == getCharForUUID(cuveReadCBUUID, forperipheral: peripheral) {
             print("Message recieved from cuve ESP32")
             messageReceivedCallbackCuveEsp32?(characteristic.value)
@@ -220,6 +224,10 @@ extension BLEManager: CBCentralManagerDelegate {
     func peripheral(_ peripheral: CBPeripheral, didWriteValueFor characteristic: CBCharacteristic, error: Error?) {
         if characteristic == getCharForUUID(pokerWriteCBUUID, forperipheral: peripheral) {
             print("Message sent to poker ESP32")
+            sendDataCallbackPokerEsp32?(peripheral.name)
+        }
+        else if characteristic == getCharForUUID(pokerBisWriteCBUUID, forperipheral: peripheral) {
+            print("Message sent to poker ESP32 bis")
             sendDataCallbackPokerEsp32?(peripheral.name)
         }
         else {

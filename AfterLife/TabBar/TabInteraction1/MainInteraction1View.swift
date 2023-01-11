@@ -32,14 +32,13 @@ struct MainInteraction1View: View {
         SpheroInteraction1Struct(name: "SB-5D1C", bloodGroup: "b"),
         SpheroInteraction1Struct(name: "SB-42C1", bloodGroup: "o"),
         SpheroInteraction1Struct(name: "SB-F682", bloodGroup: "ab"),
-        //SpheroInteraction1Struct(name: "SB-6C4C", bloodGroup: "a")
+        SpheroInteraction1Struct(name: "SB-0994", bloodGroup: "a")
     ]
+    
+    var spheroInteraction2Name = "SB-2020"
     
     @State var spherosThatRotated: [UUID] = []
     @State var spherosThatClashed: [UUID] = []
-    
-    //@State var spherosInteraction1Rotation = [false, false]
-    //@State var spherosInteraction1Clash = [false, false]
     
     @State var spheroConnectionString = "No sphero connected"
     
@@ -48,7 +47,7 @@ struct MainInteraction1View: View {
             VStack {
                 Text(spheroConnectionString)
                 Button("Connect to spheros") {
-                    SharedToyBox.instance.searchForBoltsNamed([spherosInteraction1[0].name, spherosInteraction1[1].name, spherosInteraction1[2].name, spherosInteraction1[3].name]) { err in
+                    SharedToyBox.instance.searchForBoltsNamed([spherosInteraction1[0].name, spherosInteraction1[1].name, spherosInteraction1[2].name, spherosInteraction1[3].name, spherosInteraction1[4].name, spheroInteraction2Name]) { err in
                         if err == nil {
                             self.spheroConnectionString = "Connected to " + String(spherosInteraction1.count) + " spheros"
                             isConnectedToSpheros = true

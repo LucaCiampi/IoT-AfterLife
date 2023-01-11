@@ -16,11 +16,11 @@ struct MainInteraction3View: View {
     @State var isScanningDevices = false
     @State var isShowingDetailView = false
     
-    @State var spheroConnectionString = "No sphero connected"
-    @State var isConnectedToSphero = false
+    //@State var spheroConnectionString = "No sphero connected"
+    //@State var isConnectedToSphero = false
     
-    var spheroInteraction3Name = "SB-5D1C"
-    var incompatibleSpheroInteraction3Name = "SB-8C49"
+    //var spheroInteraction3Name = "SB-5D1C"
+    //var incompatibleSpheroInteraction3Name = "SB-8C49"
     
     @State var currentHeading: Double = 0
     @State var isSpheroRotating = false
@@ -76,6 +76,7 @@ struct MainInteraction3View: View {
                         connectionString = "No ESP32 connected"
                     }
                 })
+                /*
                 VStack {
                     Text(spheroConnectionString)
                     Button("Connect to spheros") {
@@ -91,6 +92,7 @@ struct MainInteraction3View: View {
                         }
                     }
                 }
+                */
             }.padding()
             
             VStack {
