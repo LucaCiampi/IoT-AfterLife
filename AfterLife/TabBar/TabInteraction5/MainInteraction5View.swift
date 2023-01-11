@@ -40,7 +40,9 @@ struct MainInteraction5View: View {
                             if (isScanningDevices) {
                                 scanButtonString = "Stop scan"
                                 bleInterface.connectToInteraction5Esp32()
-                                bleInterface.connectToInteraction5Esp32Bis()
+                                /*DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                                    bleInterface.connectToInteraction5Esp32Bis()
+                                }*/
                             }
                             else {
                                 scanButtonString = "Start scan"

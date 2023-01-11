@@ -20,7 +20,7 @@ class BLEManager: NSObject {
     
     let pokerBisAuthCBUUID = CBUUID(string: "FDA6ADC0-D568-4586-ADE5-63F21168428D")
     let pokerBisWriteCBUUID = CBUUID(string: "19BF94C5-3219-4433-967C-CB29CBF2B173")
-    let pokerBisReadCBUUID = CBUUID(string: "19BF94C5-3219-4433-967C-CB29CBF2B173")
+    let pokerBisReadCBUUID = CBUUID(string: "F4C8EE2A-8686-46C1-8CD3-06C263BFEB7D")
     
     var messageReceivedCallbackCuveEsp32: ((Data?)->())?
     var messageReceivedCallbackPokerEsp32: ((Data?)->())?

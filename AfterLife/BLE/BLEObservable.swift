@@ -28,6 +28,7 @@ class BLEObservable: ObservableObject {
     
     @Published var periphList: [Periph] = []
     @Published var connectedPeripheral: Periph? = nil
+    @Published var connectedPeripherals: [Periph]? = nil
     @Published var connectionState: ConnectionState = .disconnected
     
     // Interaction 1
@@ -71,6 +72,28 @@ class BLEObservable: ObservableObject {
                 self.connectedPeripheral = p
                 self.connectionState = .ready
                 print(p.blePeriph.identifier)
+            }
+        }
+        
+        BLEManager.instance.didDisconnectPeripheral { cbPeriph in
+            if self.connectedPeripheral?.blePeriph == cbPeriph {
+                self.connectedPeripheral = nil
+                self.connectionState = .disconnected
+            }
+        }
+    }
+    
+    func connectToMultiple(p: Periph, callback: @escaping () -> ()) {
+        self.connectionState = .connecting
+        
+        BLEManager.instance.connectPeripheral(p.blePeriph) { cbPeriph in
+            self.connectionState = .discovering
+            
+            BLEManager.instance.discoverPeripheral(cbPeriph) { cbPeriphh in
+                self.connectedPeripheral = p
+                self.connectionState = .ready
+                print(p.blePeriph.identifier)
+                callback()
             }
         }
         
@@ -161,7 +184,9 @@ class BLEObservable: ObservableObject {
         BLEManager.instance.scan { p, pname in
             let periph = Periph(blePeriph: p, name: pname)
             if periph.name == "rfid-poker-1" {
-                self.connectTo(p: periph)
+                self.connectToMultiple(p: periph) {
+                    self.connectToInteraction5Esp32Bis()
+                }
             }
         }
     }
