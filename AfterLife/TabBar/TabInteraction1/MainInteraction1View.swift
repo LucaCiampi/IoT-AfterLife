@@ -22,13 +22,16 @@ struct MainInteraction1View: View {
     @EnvironmentObject var bleInterface: BLEObservable
     
     // ESP32
-    @State var connectionString = "No device connected"
+    @State var connectionString = "No ESP32 connected"
     @State var scanButtonString = "Start scan"
     @State var isScanningDevices = false
     @State var isConnectedToEsp = false
     
     
     // Spheros
+    @State var isConnectedToSpheros = false
+    @State var spheroConnectionString = "No sphero connected"
+    
     var spherosInteraction1 = [
         SpheroInteraction1Struct(name: "SB-8C49", bloodGroup: "a"),
         //SpheroInteraction1Struct(name: "SB-5D1C", bloodGroup: "b"),
@@ -42,8 +45,8 @@ struct MainInteraction1View: View {
     @State var spherosThatRotated: [UUID] = []
     @State var spherosThatClashed: [UUID] = []
     
-    @State var isConnectedToSpheros = false
-    @State var spheroConnectionString = "No sphero connected"
+    @State var spherosRotationReady = false
+    @State var spherosClashingReady = false
     
     var body: some View {
         VStack {
@@ -122,26 +125,36 @@ struct MainInteraction1View: View {
                 }.padding()
             }.padding()
             /*
-            HStack {
-                Button("send to esp") {
-                    bleInterface.sendMessageToVerresESP32(message: "a")
-                }
-            }
-            */
+             HStack {
+             Button("send to esp") {
+             bleInterface.sendMessageToVerresESP32(message: "a")
+             }
+             }
+             */
             if (isConnectedToSpheros) {
                 VStack {
                     
                     // Rotation
                     if (spherosThatRotated.count != spherosInteraction1.count) {
-                        Text(String(spherosThatRotated.count) + "/" + String(spherosInteraction1.count) + " spheros rotated").onAppear {
-                            checkAllSpherosRotation()
+                        if (!spherosRotationReady) {
+                            Text("Loading spheros rotation").onAppear {
+                                checkAllSpherosRotation()
+                            }
+                        }
+                        else {
+                            Text(String(spherosThatRotated.count) + "/" + String(spherosInteraction1.count) + " spheros rotated")
                         }
                     }
                     
                     // Clash
                     if (spherosThatRotated.count == spherosInteraction1.count) {
-                        Text(String(spherosThatClashed.count) + "/" + String(spherosInteraction1.count) + " spheros clashed").onAppear {
-                            checkAllSpherosClash()
+                        if (!spherosClashingReady) {
+                            Text("Loading spheros clashing").onAppear {
+                                checkAllSpherosClash()
+                            }
+                        }
+                        else {
+                            Text(String(spherosThatClashed.count) + "/" + String(spherosInteraction1.count) + " spheros clashed")
                         }
                     }
                     
@@ -194,6 +207,8 @@ struct MainInteraction1View: View {
      For each sphero, sends message to enable data collection related to spinning
      */
     func checkAllSpherosRotation() {
+        spherosRotationReady = false
+        
         for i in 0...(spherosInteraction1.count - 1) {
             // Waits 5 seconds before calling + "i" seconds based on index
             DispatchQueue.main.asyncAfter(deadline: .now() + Double(5 + i)) {
@@ -203,6 +218,9 @@ struct MainInteraction1View: View {
                     SharedToyBox.instance.bolts[i].setMatrix(color: .red)
                 }
                 
+                if (i == (spherosInteraction1.count - 1)) {
+                    spherosRotationReady = true
+                }
             }
         }
     }
@@ -211,6 +229,8 @@ struct MainInteraction1View: View {
      For each sphero, sends message to enable data collection related to clashing
      */
     func checkAllSpherosClash() {
+        spherosClashingReady = false
+        
         for i in 0...(spherosInteraction1.count - 1) {
             // Waits 1 seconds before calling + "i" seconds based on index
             DispatchQueue.main.asyncAfter(deadline: .now() + Double(1 + i)) {
@@ -222,6 +242,10 @@ struct MainInteraction1View: View {
                     
                     // Sends message to the ESP32 in order to light up the adequate led for the wine glass
                     bleInterface.sendMessageToVerresESP32(message: spherosInteraction1[i].bloodGroup)
+                }
+                
+                if (i == (spherosInteraction1.count - 1)) {
+                    spherosClashingReady = true
                 }
             }
         }
@@ -277,7 +301,7 @@ struct MainInteraction1View: View {
                         let absSum = abs(acceleration.x!)+abs(acceleration.y!)+abs(acceleration.z!)
                         
                         // If sphero is shaking too much, add to array of clashed spheros
-                        if absSum > 3.7 {
+                        if absSum > 4.5 {
                             if !self.spherosThatClashed.contains(bolt.identifier) {
                                 self.spherosThatClashed.append(bolt.identifier)
                                 onClash()
@@ -361,6 +385,9 @@ struct MainInteraction1View: View {
      Turns every sphero sensors and matrix off
      */
     func spherosOff() {
+        spherosThatRotated = []
+        spherosThatClashed = []
+        
         for i in 0...(spherosInteraction1.count - 1) {
             SharedToyBox.instance.bolts[i].clearMatrix()
             SharedToyBox.instance.bolts[i].sensorControl.disable()
