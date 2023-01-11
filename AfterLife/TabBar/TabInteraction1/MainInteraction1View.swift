@@ -130,28 +130,30 @@ struct MainInteraction1View: View {
             }.padding()
             
             // Sphero barman
-            VStack {
-                Text("IPHONE 2 ONLY")
-                Button(!isConnectedToTemoinSphero ? "Connect to témoin" : "Disconnect from témoin") {
-                    if (!isConnectedToTemoinSphero) {
-                        print("Connection to témoin")
-                        SharedToyBox.instance.searchForBoltsNamed([spheroTemoinBarmanName]) { err in
-                            if err == nil {
-                                isConnectedToTemoinSphero = true
-                                drawSpheroTemoin()
-                            }
-                            else {
-                                print("erreur connexion sphero témoin")
+            if (!isConnectedToSpheros) {
+                VStack {
+                    Text("IPHONE 2 ONLY")
+                    Button(!isConnectedToTemoinSphero ? "Connect to témoin" : "Disconnect from témoin") {
+                        if (!isConnectedToTemoinSphero) {
+                            print("Connection to témoin")
+                            SharedToyBox.instance.searchForBoltsNamed([spheroTemoinBarmanName]) { err in
+                                if err == nil {
+                                    isConnectedToTemoinSphero = true
+                                    drawSpheroTemoin()
+                                }
+                                else {
+                                    print("erreur connexion sphero témoin")
+                                }
                             }
                         }
-                    }
-                    else {
-                        SharedToyBox.instance.bolts.forEach { bolt in
-                            SharedToyBox.instance.box.disconnect(toy: bolt)
+                        else {
+                            SharedToyBox.instance.bolts.forEach { bolt in
+                                SharedToyBox.instance.box.disconnect(toy: bolt)
+                            }
+                            SharedToyBox.instance.boltsNames = []
+                            isConnectedToTemoinSphero = false
+                            spheroConnectionString = "No sphero connected"
                         }
-                        SharedToyBox.instance.boltsNames = []
-                        isConnectedToTemoinSphero = false
-                        spheroConnectionString = "No sphero connected"
                     }
                 }
             }
