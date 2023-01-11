@@ -128,48 +128,52 @@ struct MainInteraction1View: View {
             */
             if (isConnectedToSpheros) {
                 VStack {
+                    
+                    // Rotation
                     if (spherosThatRotated.count != spherosInteraction1.count) {
                         Text(String(spherosThatRotated.count) + "/" + String(spherosInteraction1.count) + " spheros rotated").onAppear {
                             for i in 0...(spherosInteraction1.count - 1) {
                                 
                                 // Checks rotation of sphero i
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + Double(1 + i)) {
                                     print("checking if sphero rotated #"+String(i))
                                     checkIfSpheroHasRotated(bolt: SharedToyBox.instance.bolts[i]) {
                                         print(spherosInteraction1[i].name + " has rotated")
                                         SharedToyBox.instance.bolts[i].setMatrix(color: .red)
                                     }
                                     
-                                    sleep(1)
                                 }
                                 
                             }
                         }
                     }
+                    
+                    // Clash
                     if (spherosThatRotated.count == spherosInteraction1.count) {
                         Text(String(spherosThatClashed.count) + "/" + String(spherosInteraction1.count) + " spheros clashed").onAppear {
                             for i in 0...(spherosInteraction1.count - 1) {
                                 
                                 // Checks clashing of sphero i
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + Double(1 + i)) {
                                     print("checking if sphero clashed #"+String(i))
                                     checkIfSpheroHasClashed(bolt: SharedToyBox.instance.bolts[i]) {
                                         print(spherosInteraction1[i].name + " has clashed")
                                         drawLetterOnMatrix(letter: spherosInteraction1[i].bloodGroup, bolt: SharedToyBox.instance.bolts[i])
                                         bleInterface.sendMessageToVerresESP32(message: spherosInteraction1[i].bloodGroup)
                                     }
-                                    
-                                    sleep(1)
                                 }
                             }
                         }
                     }
+                    
+                    // Disable
                     if (spherosThatClashed.count == spherosInteraction1.count) {
                         Text("All spheros have clashed").onAppear {
                             for i in 0...(spherosInteraction1.count - 1) {
                                 // removes data collection
-                                SharedToyBox.instance.bolts[i].sensorControl.disable()
-                                sleep(1)
+                                DispatchQueue.main.asyncAfter(deadline: .now() + Double(1 + i)) {
+                                    SharedToyBox.instance.bolts[i].sensorControl.disable()
+                                }
                             }
                         }
                     }
