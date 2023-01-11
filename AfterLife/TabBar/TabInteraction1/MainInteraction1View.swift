@@ -31,8 +31,8 @@ struct MainInteraction1View: View {
     // Spheros
     var spherosInteraction1 = [
         SpheroInteraction1Struct(name: "SB-8C49", bloodGroup: "a"),
-        SpheroInteraction1Struct(name: "SB-5D1C", bloodGroup: "b"),
-        SpheroInteraction1Struct(name: "SB-42C1", bloodGroup: "o"),
+        //SpheroInteraction1Struct(name: "SB-5D1C", bloodGroup: "b"),
+        //SpheroInteraction1Struct(name: "SB-42C1", bloodGroup: "o"),
         SpheroInteraction1Struct(name: "SB-0994", bloodGroup: "a"),
         SpheroInteraction1Struct(name: "SB-F682", bloodGroup: "ab")
     ]
@@ -66,7 +66,9 @@ struct MainInteraction1View: View {
                         SharedToyBox.instance.bolts.forEach { bolt in
                             SharedToyBox.instance.box.disconnect(toy: bolt)
                         }
+                        SharedToyBox.instance.boltsNames = []
                         isConnectedToSpheros = false
+                        spheroConnectionString = "No sphero connected"
                     }
                 }
                 VStack {
@@ -132,41 +134,18 @@ struct MainInteraction1View: View {
                     // Rotation
                     if (spherosThatRotated.count != spherosInteraction1.count) {
                         Text(String(spherosThatRotated.count) + "/" + String(spherosInteraction1.count) + " spheros rotated").onAppear {
-                            for i in 0...(spherosInteraction1.count - 1) {
-                                
-                                // Checks rotation of sphero i
-                                DispatchQueue.main.asyncAfter(deadline: .now() + Double(1 + i)) {
-                                    print("checking if sphero rotated #"+String(i))
-                                    checkIfSpheroHasRotated(bolt: SharedToyBox.instance.bolts[i]) {
-                                        print(spherosInteraction1[i].name + " has rotated")
-                                        SharedToyBox.instance.bolts[i].setMatrix(color: .red)
-                                    }
-                                    
-                                }
-                                
-                            }
+                            checkAllSpherosRotation()
                         }
                     }
                     
                     // Clash
                     if (spherosThatRotated.count == spherosInteraction1.count) {
                         Text(String(spherosThatClashed.count) + "/" + String(spherosInteraction1.count) + " spheros clashed").onAppear {
-                            for i in 0...(spherosInteraction1.count - 1) {
-                                
-                                // Checks clashing of sphero i
-                                DispatchQueue.main.asyncAfter(deadline: .now() + Double(1 + i)) {
-                                    print("checking if sphero clashed #"+String(i))
-                                    checkIfSpheroHasClashed(bolt: SharedToyBox.instance.bolts[i]) {
-                                        print(spherosInteraction1[i].name + " has clashed")
-                                        drawLetterOnMatrix(letter: spherosInteraction1[i].bloodGroup, bolt: SharedToyBox.instance.bolts[i])
-                                        bleInterface.sendMessageToVerresESP32(message: spherosInteraction1[i].bloodGroup)
-                                    }
-                                }
-                            }
+                            checkAllSpherosClash()
                         }
                     }
                     
-                    // Disable
+                    // Disabling
                     if (spherosThatClashed.count == spherosInteraction1.count) {
                         Text("All spheros have clashed").onAppear {
                             for i in 0...(spherosInteraction1.count - 1) {
@@ -182,30 +161,13 @@ struct MainInteraction1View: View {
                 // Emergency
                 HStack {
                     Button("Skip rotation") {
-                        for i in 0...(spherosInteraction1.count - 1) {
-                            if (!spherosThatRotated.contains(SharedToyBox.instance.bolts[i].identifier)) {
-                                spherosThatRotated.append(SharedToyBox.instance.bolts[i].identifier)
-                            }
-                            SharedToyBox.instance.bolts[i].setMatrix(color: .red)
-                            print("set color red to bolt #" + String(i))
-                        }
+                        skipRotation()
                     }.padding()
                     Button("Skip clash") {
-                        for i in 0...(spherosInteraction1.count - 1) {
-                            if (!spherosThatClashed.contains(SharedToyBox.instance.bolts[i].identifier)) {
-                                spherosThatClashed.append(SharedToyBox.instance.bolts[i].identifier)
-                            }
-                            SharedToyBox.instance.bolts[i].setMatrix(color: .red)
-                            drawLetterOnMatrix(letter: spherosInteraction1[i].bloodGroup, bolt: SharedToyBox.instance.bolts[i])
-                            print("displayed letter to bolt #" + String(i))
-                        }
+                        skipClash()
                     }.padding()
                     Button("Turn spheros off") {
-                        for i in 0...(spherosInteraction1.count - 1) {
-                            SharedToyBox.instance.bolts[i].clearMatrix()
-                            SharedToyBox.instance.bolts[i].sensorControl.disable()
-                            print("disabled bolt #" + String(i))
-                        }
+                        spherosOff()
                     }.padding()
                     Button("Turn leds off") {
                         bleInterface.sendMessageToVerresESP32(message: "off")
@@ -215,6 +177,9 @@ struct MainInteraction1View: View {
         }
     }
     
+    /**
+     Returns array of name of all spheros to connect to based on spherosInteraction1[]
+     */
     func getAllSpherosToConnectTo() -> [String] {
         var returnArray: [String] = []
         
@@ -223,6 +188,43 @@ struct MainInteraction1View: View {
         }
         
         return returnArray
+    }
+    
+    /**
+     For each sphero, sends message to enable data collection related to spinning
+     */
+    func checkAllSpherosRotation() {
+        for i in 0...(spherosInteraction1.count - 1) {
+            // Waits 5 seconds before calling + "i" seconds based on index
+            DispatchQueue.main.asyncAfter(deadline: .now() + Double(5 + i)) {
+                print("checking if sphero rotated #"+String(i))
+                checkIfSpheroHasRotated(bolt: SharedToyBox.instance.bolts[i]) {
+                    print(spherosInteraction1[i].name + " has rotated")
+                    SharedToyBox.instance.bolts[i].setMatrix(color: .red)
+                }
+                
+            }
+        }
+    }
+    
+    /**
+     For each sphero, sends message to enable data collection related to clashing
+     */
+    func checkAllSpherosClash() {
+        for i in 0...(spherosInteraction1.count - 1) {
+            // Waits 1 seconds before calling + "i" seconds based on index
+            DispatchQueue.main.asyncAfter(deadline: .now() + Double(1 + i)) {
+                SharedToyBox.instance.bolts[i].sensorControl.disable()
+                print("checking if sphero clashed #"+String(i))
+                checkIfSpheroHasClashed(bolt: SharedToyBox.instance.bolts[i]) {
+                    print(spherosInteraction1[i].name + " has clashed")
+                    drawLetterOnMatrix(letter: spherosInteraction1[i].bloodGroup, bolt: SharedToyBox.instance.bolts[i])
+                    
+                    // Sends message to the ESP32 in order to light up the adequate led for the wine glass
+                    bleInterface.sendMessageToVerresESP32(message: spherosInteraction1[i].bloodGroup)
+                }
+            }
+        }
     }
     
     /**
@@ -289,13 +291,6 @@ struct MainInteraction1View: View {
     }
     
     /**
-     Activates led band
-     */
-    func activateLedsBand() {
-        print("activating leds band")
-    }
-    
-    /**
      Draws the blood type letter on the sphero bolt screen
      */
     func drawLetterOnMatrix(letter: String, bolt: BoltToy) {
@@ -332,6 +327,44 @@ struct MainInteraction1View: View {
             bolt.drawMatrixLine(from: Pixel(x: 0, y: 4), to: Pixel(x: 0, y: 6), color: .white)
         default:
             print("unkown letter to draw")
+        }
+    }
+    
+    /**
+     Forces non-rotated spheros
+     */
+    func skipRotation() {
+        for i in 0...(spherosInteraction1.count - 1) {
+            if (!spherosThatRotated.contains(SharedToyBox.instance.bolts[i].identifier)) {
+                spherosThatRotated.append(SharedToyBox.instance.bolts[i].identifier)
+                SharedToyBox.instance.bolts[i].setMatrix(color: .red)
+                print("Forced color red to bolt #" + String(i))
+            }
+        }
+    }
+    
+    /**
+     Forces non-clashed spheros
+     */
+    func skipClash() {
+        for i in 0...(spherosInteraction1.count - 1) {
+            if (!spherosThatClashed.contains(SharedToyBox.instance.bolts[i].identifier)) {
+                spherosThatClashed.append(SharedToyBox.instance.bolts[i].identifier)
+                SharedToyBox.instance.bolts[i].setMatrix(color: .red)
+                drawLetterOnMatrix(letter: spherosInteraction1[i].bloodGroup, bolt: SharedToyBox.instance.bolts[i])
+                print("Forced displaying letter to bolt #" + String(i))
+            }
+        }
+    }
+    
+    /**
+     Turns every sphero sensors and matrix off
+     */
+    func spherosOff() {
+        for i in 0...(spherosInteraction1.count - 1) {
+            SharedToyBox.instance.bolts[i].clearMatrix()
+            SharedToyBox.instance.bolts[i].sensorControl.disable()
+            print("disabled bolt #" + String(i))
         }
     }
 }

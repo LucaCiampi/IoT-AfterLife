@@ -16,14 +16,8 @@ struct MainInteraction3View: View {
     @State var isScanningDevices = false
     @State var isShowingDetailView = false
     
-    //@State var spheroConnectionString = "No sphero connected"
-    //@State var isConnectedToSphero = false
-    
-    //var spheroInteraction3Name = "SB-5D1C"
-    //var incompatibleSpheroInteraction3Name = "SB-8C49"
-    
-    @State var currentHeading: Double = 0
-    @State var isSpheroRotating = false
+    @State var compatibleSpheroSpinning = false
+    @State var uncompatibleSpheroSpinning = false
     
     var body: some View {
         VStack {
@@ -121,16 +115,28 @@ struct MainInteraction3View: View {
                     bleInterface.listenForCuveEsp32()
                 }.onChange(of: bleInterface.cuveDataReceived.last?.content) { newValue in
                     if (newValue == "spin") {
-                        MakeSpheroSpin(boltId: 0)
+                        compatibleSpheroSpinning = !compatibleSpheroSpinning
+                        if (compatibleSpheroSpinning) {
+                            MakeSpheroSpin(boltId: 0)
+                        }
+                        else {
+                            StopSphero(boltId: 0)
+                        }
                     }
                     else if (newValue == "pump") {
-                        MakeSpheroSpin(boltId: 1)
-                        //ActivatePump()
+                        uncompatibleSpheroSpinning = !uncompatibleSpheroSpinning
+                        if (uncompatibleSpheroSpinning) {
+                            MakeSpheroSpin(boltId: 1)
+                        }
+                        else {
+                            StopSphero(boltId: 1)
+                        }
                     }
                     else {
                         print("message de l'ESP32 de la cuve non conforme")
                     }
-                }.padding()
+                }
+                .padding()
             }
         }
         .padding()
