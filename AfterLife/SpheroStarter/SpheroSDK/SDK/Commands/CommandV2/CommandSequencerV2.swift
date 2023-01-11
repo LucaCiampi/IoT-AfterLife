@@ -192,7 +192,7 @@ public class CommandSequencerV2 {
         switch byte {
         case APIV2Constants.startOfPacket:
             if parsingState != .waitingForStartOfPacket {
-                print("got SOP but parser state was not waiting for it")
+                //print("got SOP but parser state was not waiting for it")
                 reset()
                 return
             }
@@ -211,7 +211,7 @@ public class CommandSequencerV2 {
             currentData.append(byteCopy)
 
             if parsingState != .waitingForEndOfPacket || currentData.count < 7 {
-                print("got EOP but parser state was not waiting for it")
+                //print("got EOP but parser state was not waiting for it")
                 reset()
                 return
             }

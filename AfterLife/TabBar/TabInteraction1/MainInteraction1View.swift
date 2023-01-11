@@ -119,13 +119,13 @@ struct MainInteraction1View: View {
                     })
                 }.padding()
             }.padding()
-            
+            /*
             HStack {
                 Button("send to esp") {
                     bleInterface.sendMessageToVerresESP32(message: "a")
                 }
             }
-            
+            */
             if (isConnectedToSpheros) {
                 VStack {
                     if (spherosThatRotated.count != spherosInteraction1.count) {
@@ -179,27 +179,32 @@ struct MainInteraction1View: View {
                 HStack {
                     Button("Skip rotation") {
                         for i in 0...(spherosInteraction1.count - 1) {
-                            spherosThatRotated.append(SharedToyBox.instance.bolts[i].identifier)
+                            if (!spherosThatRotated.contains(SharedToyBox.instance.bolts[i].identifier)) {
+                                spherosThatRotated.append(SharedToyBox.instance.bolts[i].identifier)
+                            }
                             SharedToyBox.instance.bolts[i].setMatrix(color: .red)
                             print("set color red to bolt #" + String(i))
                         }
                     }.padding()
                     Button("Skip clash") {
                         for i in 0...(spherosInteraction1.count - 1) {
-                            spherosThatClashed.append(SharedToyBox.instance.bolts[i].identifier)
+                            if (!spherosThatClashed.contains(SharedToyBox.instance.bolts[i].identifier)) {
+                                spherosThatClashed.append(SharedToyBox.instance.bolts[i].identifier)
+                            }
+                            SharedToyBox.instance.bolts[i].setMatrix(color: .red)
                             drawLetterOnMatrix(letter: spherosInteraction1[i].bloodGroup, bolt: SharedToyBox.instance.bolts[i])
                             print("displayed letter to bolt #" + String(i))
                         }
                     }.padding()
-                    Button("Turn lights off") {
-                        bleInterface.sendMessageToVerresESP32(message: "off")
-                    }.padding()
-                    Button("Turn off") {
+                    Button("Turn spheros off") {
                         for i in 0...(spherosInteraction1.count - 1) {
                             SharedToyBox.instance.bolts[i].clearMatrix()
                             SharedToyBox.instance.bolts[i].sensorControl.disable()
                             print("disabled bolt #" + String(i))
                         }
+                    }.padding()
+                    Button("Turn leds off") {
+                        bleInterface.sendMessageToVerresESP32(message: "off")
                     }.padding()
                 }
             }
