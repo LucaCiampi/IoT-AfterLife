@@ -33,8 +33,8 @@ struct MainInteraction1View: View {
         SpheroInteraction1Struct(name: "SB-8C49", bloodGroup: "a"),
         SpheroInteraction1Struct(name: "SB-5D1C", bloodGroup: "b"),
         SpheroInteraction1Struct(name: "SB-42C1", bloodGroup: "o"),
-        SpheroInteraction1Struct(name: "SB-F682", bloodGroup: "ab"),
-        SpheroInteraction1Struct(name: "SB-0994", bloodGroup: "a")
+        SpheroInteraction1Struct(name: "SB-0994", bloodGroup: "a"),
+        SpheroInteraction1Struct(name: "SB-F682", bloodGroup: "ab")
     ]
     
     //var spheroInteraction2Name = "SB-2020"
@@ -49,7 +49,7 @@ struct MainInteraction1View: View {
         VStack {
             VStack {
                 Text(spheroConnectionString)
-                Button("Connect to spheros") {
+                Button(!isConnectedToSpheros ? "Connect to spheros" : "Disconnect from spheros") {
                     if (!isConnectedToSpheros) {
                         print("Connection to spheros")
                         SharedToyBox.instance.searchForBoltsNamed(getAllSpherosToConnectTo()) { err in
@@ -66,6 +66,7 @@ struct MainInteraction1View: View {
                         SharedToyBox.instance.bolts.forEach { bolt in
                             SharedToyBox.instance.box.disconnect(toy: bolt)
                         }
+                        isConnectedToSpheros = false
                     }
                 }
                 VStack {

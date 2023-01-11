@@ -199,7 +199,7 @@ public class CommandSequencerV2 {
             
             if skippedData {
                 skippedData = false
-                print("skipped data, not sure what this means")
+                //print("skipped data, not sure what this means")
             }
             
             parsingState = .waitingForEndOfPacket
