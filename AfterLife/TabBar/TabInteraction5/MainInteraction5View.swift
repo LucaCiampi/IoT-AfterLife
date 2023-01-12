@@ -11,7 +11,7 @@ import AVFoundation
 struct MainInteraction5View: View {
     @EnvironmentObject var bleInterface: BLEObservable
     
-    @State var connectionString = "No device connected"
+    @State var connectionString = "No ESP32 connected"
     @State var scanButtonString = "Start scan"
     @State var isScanningDevices = false
     @State var isShowingDetailView = false
@@ -24,16 +24,14 @@ struct MainInteraction5View: View {
     
     var body: some View {
         VStack {
+            // ESP32
             VStack {
                 Text(connectionString)
-                
                 if bleInterface.connectedPeripheral != nil {
                     Button("Disconnect") {
                         bleInterface.disconnectFrom(p: bleInterface.connectedPeripheral!)
                     }
                 }
-            }.padding()
-            VStack {
                 if (!isShowingDetailView) {
                     HStack {
                         Button(scanButtonString) {
@@ -42,8 +40,8 @@ struct MainInteraction5View: View {
                                 scanButtonString = "Stop scan"
                                 bleInterface.connectToInteraction5Esp32()
                                 /*DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                                    bleInterface.connectToInteraction5Esp32Bis()
-                                }*/
+                                 bleInterface.connectToInteraction5Esp32Bis()
+                                 }*/
                             }
                             else {
                                 scanButtonString = "Start scan"
@@ -59,9 +57,14 @@ struct MainInteraction5View: View {
                     Text(pokerSoundStatus)
                     Text(pokerEsp32ReceivedMessage)
                 }
+            }
+            
+            // Poker
+            VStack {
                 Button("Make poker game sound") {
                     makePokerGameSound()
-                }.padding()
+                }
+                .padding()
             }.padding()
         }.onChange(of: bleInterface.connectionState, perform: { newValue in
             switch newValue {
@@ -96,28 +99,29 @@ struct MainInteraction5View: View {
     
     func makePokerGameSound() {
         guard let url = Bundle.main.url(forResource: "giant_bell", withExtension: "mp3") else { return print("giant_bell sound not found") }
-
+        
         do {
-            try AVAudioSession.sharedInstance().setCategory(.soloAmbient, mode: .default)
-            try AVAudioSession.sharedInstance().setActive(true)
-
-            /* The following line is required for the player to work on iOS 11. Change the file type accordingly*/
-            player = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileType.mp3.rawValue)
-
-            /* iOS 10 and earlier require the following line:
-            player = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileTypeMPEGLayer3) */
-
-            guard let player = player else { return }
-
             if (!isPokerSoundPlaying) {
+                //try AVAudioSession.sharedInstance().setCategory(.soloAmbient, mode: .default)
+                try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
+                try AVAudioSession.sharedInstance().setActive(true)
+                
+                /* The following line is required for the player to work on iOS 11. Change the file type accordingly*/
+                player = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileType.mp3.rawValue)
+                
+                /* iOS 10 and earlier require the following line:
+                 player = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileTypeMPEGLayer3) */
+                
+                guard let player = player else { return }
+                
                 isPokerSoundPlaying = true
                 player.play()
                 print("giant_bell just played")
-                DispatchQueue.main.asyncAfter(deadline: .now() + 6) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                     isPokerSoundPlaying = false
                 }
             }
-
+            
         } catch let error {
             print(error.localizedDescription)
         }
