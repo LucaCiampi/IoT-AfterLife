@@ -11,7 +11,7 @@ struct MainInteraction3View: View {
     
     @EnvironmentObject var bleInterface: BLEObservable
     
-    @State var connectionString = "No device connected"
+    @State var connectionString = "No ESP32 connected"
     @State var scanButtonString = "Start scan"
     @State var isScanningDevices = false
     @State var isShowingDetailView = false

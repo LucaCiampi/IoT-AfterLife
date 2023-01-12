@@ -15,7 +15,7 @@ struct MainInteraction2View: View {
     @Binding public var showModal: Bool
     @Binding public var startVideo: Bool
     
-    @State var connectionString = "No device connected"
+    @State var connectionString = "No sphero connected"
     @State var isScanningDevices = false
     @State var isShowingDetailView = false
     
@@ -25,7 +25,7 @@ struct MainInteraction2View: View {
     
     var body: some View {
         VStack {
-            Text("iPad ONLY zone")
+            Text("IPAD ONLY")
             Text(connectionString)
             Button("Connect to sphero " + spheroInteraction2Name) {
                 SharedToyBox.instance.searchForBoltsNamed([spheroInteraction2Name]) { err in
@@ -34,7 +34,7 @@ struct MainInteraction2View: View {
                         isShowingDetailView = true
                     }
                 }
-            }.padding()
+            }
             
             Button("Go full screen") {
                 showModal = true
