@@ -19,6 +19,9 @@ struct MainInteraction3View: View {
     @State var compatibleSpheroSpinning = false
     @State var uncompatibleSpheroSpinning = false
     
+    @State var compatibleSpheroId: Int = 0
+    @State var uncompatibleSpheroId: Int = 1
+    
     var body: some View {
         VStack {
             HStack {
@@ -140,6 +143,17 @@ struct MainInteraction3View: View {
         .padding()
     }
     
+    func RetrieveCompatibleAndUncompatibleSpherosId() {
+        for i in 0...(SharedToyBox.instance.bolts.count - 1) {
+            if (SharedToyBox.instance.bolts[i].bloodGroup == "a") {
+                compatibleSpheroId = i
+            }
+            else if (SharedToyBox.instance.bolts[i].bloodGroup == "o") {
+                uncompatibleSpheroId = i
+            }
+        }
+    }
+    
     /**
      Init parameters before moving the sphero bolt
      */
@@ -153,7 +167,7 @@ struct MainInteraction3View: View {
      Makes the compatible sphero bolt rotate when placed in the pot
      */
     func MakeCompatibleSpheroSpin() {
-        SharedToyBox.instance.bolts[0].sendTurnCommand()
+        SharedToyBox.instance.bolts[compatibleSpheroId].sendTurnCommand()
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             compatibleSpheroSpinning = true
         }
@@ -164,7 +178,7 @@ struct MainInteraction3View: View {
      */
     func StopCompatibleSphero() {
         print("StopCompatibleSphero")
-        SharedToyBox.instance.bolts[0].stopTurnCommand()
+        SharedToyBox.instance.bolts[compatibleSpheroId].stopTurnCommand()
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             compatibleSpheroSpinning = false
         }
@@ -174,7 +188,7 @@ struct MainInteraction3View: View {
      Makes the uncompatible sphero bolt rotate when placed in the pot
      */
     func MakeUncompatibleSpheroSpin() {
-        SharedToyBox.instance.bolts[1].sendTurnCommand()
+        SharedToyBox.instance.bolts[uncompatibleSpheroId].sendTurnCommand()
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             uncompatibleSpheroSpinning = true
         }
@@ -185,7 +199,7 @@ struct MainInteraction3View: View {
      */
     func StopUncompatibleSphero() {
         print("StopUncompatibleSphero")
-        SharedToyBox.instance.bolts[1].stopTurnCommand()
+        SharedToyBox.instance.bolts[uncompatibleSpheroId].stopTurnCommand()
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             uncompatibleSpheroSpinning = false
         }

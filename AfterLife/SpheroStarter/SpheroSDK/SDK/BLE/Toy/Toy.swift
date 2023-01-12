@@ -27,6 +27,7 @@ public class Toy: ToyInformation, ToyInteractable {
     class var descriptor: String { return "" }
     
     let identifier: UUID
+    
     var owner: ToyBox?
     
     init(identifier: UUID, owner: ToyBox) {

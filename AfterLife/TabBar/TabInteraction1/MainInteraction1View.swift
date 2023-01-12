@@ -15,6 +15,7 @@ struct SpheroInteraction1Struct:  Equatable {
     
     var name: String
     var bloodGroup: String
+    let id: String
 }
 
 struct MainInteraction1View: View {
@@ -35,13 +36,14 @@ struct MainInteraction1View: View {
     @State var isConnectedToSpheros = false
     @State var spheroConnectionString = "No sphero connected"
     
-    let spherosInteraction1 = [
-        SpheroInteraction1Struct(name: "SB-0994", bloodGroup: "a"), // compatible
-        SpheroInteraction1Struct(name: "SB-42C1", bloodGroup: "o"), // incompatible
-        SpheroInteraction1Struct(name: "SB-5D1C", bloodGroup: "b"),
-        SpheroInteraction1Struct(name: "SB-F682", bloodGroup: "ab")
+    var spherosInteraction1 = [
+        SpheroInteraction1Struct(name: "SB-0994", bloodGroup: "a", id: "2FCD34C8-DBB4-A278-78A3-57EE55317640"), // compatible
+        SpheroInteraction1Struct(name: "SB-42C1", bloodGroup: "o", id: "34CF88C4-7B33-6586-1774-E36AC6FFFBA0"), // incompatible
+        SpheroInteraction1Struct(name: "SB-5D1C", bloodGroup: "b", id: "77F312D1-479C-820D-1CD0-47E17807D4DB"),
+        SpheroInteraction1Struct(name: "SB-F682", bloodGroup: "ab", id: "B0473572-1896-F66C-D9BC-CF194C936465")
     ]
     
+    @State var hasStarted = false
     @State var spherosThatRotated: [UUID] = []
     @State var spherosThatClashed: [UUID] = []
     
@@ -61,6 +63,7 @@ struct MainInteraction1View: View {
                             if err == nil {
                                 self.spheroConnectionString = "Connected to " + String(spherosInteraction1.count) + " spheros"
                                 isConnectedToSpheros = true
+                                assignEachSpheroToData()
                             }
                             else {
                                 print("erreur connexion spheros")
@@ -158,21 +161,20 @@ struct MainInteraction1View: View {
                 }
             }
             
-            /*
-             // Help
-             HStack {
-             Button("send to esp") {
-             bleInterface.sendMessageToVerresESP32(message: "a")
-             }
-             }
-             */
             if (isConnectedToSpheros) {
                 VStack {
                     
+                    // Start
+                    if (!hasStarted) {
+                        Button("Start") {
+                            hasStarted = true
+                        }
+                    }
+                    
                     // Rotation
-                    if (spherosThatRotated.count != spherosInteraction1.count) {
+                    if (hasStarted && spherosThatRotated.count != spherosInteraction1.count) {
                         if (!spherosRotationReady) {
-                            Text("Loading spheros rotation...").onAppear {
+                            Text("Loading spheros clashing...").onAppear {
                                 checkAllSpherosRotation()
                             }
                         }
@@ -241,6 +243,24 @@ struct MainInteraction1View: View {
     }
     
     /**
+     Assigns each connected sphero to its corresponding data
+     */
+    func assignEachSpheroToData() {
+        SharedToyBox.instance.bolts.forEach { bolt in
+            for i in 0...(spherosInteraction1.count - 1) {
+                if (String(bolt.identifier.uuidString) == spherosInteraction1[i].id) {
+                    bolt.bloodGroup = spherosInteraction1[i].bloodGroup
+                    print("------")
+                    print(bolt.identifier)
+                    print("is :")
+                    print(bolt.bloodGroup ?? "none")
+                    print("------")
+                }
+            }
+        }
+    }
+    
+    /**
      For each sphero, sends message to enable data collection related to spinning
      */
     func checkAllSpherosRotation() {
@@ -275,10 +295,10 @@ struct MainInteraction1View: View {
                 print("checking if sphero clashed #"+String(i))
                 checkIfSpheroHasClashed(bolt: SharedToyBox.instance.bolts[i]) {
                     print(spherosInteraction1[i].name + " has clashed")
-                    drawLetterOnMatrix(letter: spherosInteraction1[i].bloodGroup, bolt: SharedToyBox.instance.bolts[i])
+                    drawLetterOnMatrix(letter: SharedToyBox.instance.bolts[i].bloodGroup!, bolt: SharedToyBox.instance.bolts[i])
                     
                     // Sends message to the ESP32 in order to light up the adequate led for the wine glass
-                    bleInterface.sendMessageToVerresESP32(message: spherosInteraction1[i].bloodGroup)
+                    bleInterface.sendMessageToVerresESP32(message: SharedToyBox.instance.bolts[i].bloodGroup!)
                 }
                 
                 if (i == (spherosInteraction1.count - 1)) {
@@ -413,8 +433,8 @@ struct MainInteraction1View: View {
             if (!spherosThatClashed.contains(SharedToyBox.instance.bolts[i].identifier)) {
                 spherosThatClashed.append(SharedToyBox.instance.bolts[i].identifier)
                 SharedToyBox.instance.bolts[i].setMatrix(color: .red)
-                drawLetterOnMatrix(letter: spherosInteraction1[i].bloodGroup, bolt: SharedToyBox.instance.bolts[i])
-                bleInterface.sendMessageToVerresESP32(message: spherosInteraction1[i].bloodGroup)
+                drawLetterOnMatrix(letter: SharedToyBox.instance.bolts[i].bloodGroup!, bolt: SharedToyBox.instance.bolts[i])
+                bleInterface.sendMessageToVerresESP32(message: SharedToyBox.instance.bolts[i].bloodGroup!)
                 print("Forced displaying letter to bolt #" + String(i))
             }
         }

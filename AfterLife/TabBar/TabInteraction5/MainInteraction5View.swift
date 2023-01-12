@@ -121,7 +121,6 @@ struct MainInteraction5View: View {
                     isPokerSoundPlaying = false
                 }
             }
-            
         } catch let error {
             print(error.localizedDescription)
         }

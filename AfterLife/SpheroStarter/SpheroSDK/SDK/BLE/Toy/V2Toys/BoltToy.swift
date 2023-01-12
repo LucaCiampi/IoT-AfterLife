@@ -15,6 +15,8 @@ class BoltToy: SpheroV2Toy {
     private let maxScrollingTextSpeed = 30
     private let maxPixelValue = 7
     
+    var bloodGroup: String?
+    
     override class var descriptor: String { return "SB-" }
     
     public override var batteryLevel: Double? {
