@@ -115,6 +115,7 @@ struct MainInteraction3View: View {
                 VStack {
                     Text(bleInterface.cuveDataReceived.last?.content ?? "silence")
                 }.onAppear {
+                    RetrieveCompatibleAndUncompatibleSpherosId()
                     bleInterface.listenForCuveEsp32()
                 }.onChange(of: bleInterface.cuveDataReceived.last) { newValue in
                     if (newValue?.content == "spin") {
@@ -143,6 +144,9 @@ struct MainInteraction3View: View {
         .padding()
     }
     
+    /**
+     Gets the spheros id in array
+     */
     func RetrieveCompatibleAndUncompatibleSpherosId() {
         print("RetrieveCompatibleAndUncompatibleSpherosId")
         for i in 0...(SharedToyBox.instance.bolts.count - 1) {

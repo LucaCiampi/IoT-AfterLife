@@ -247,7 +247,6 @@ struct MainInteraction1View: View {
      */
     func assignEachSpheroToData() {
         SharedToyBox.instance.bolts.forEach { bolt in
-            print(bolt.identifier)
             for i in 0...(spherosInteraction1.count - 1) {
                 if (String(bolt.identifier.uuidString) == spherosInteraction1[i].id) {
                     bolt.bloodGroup = spherosInteraction1[i].bloodGroup
