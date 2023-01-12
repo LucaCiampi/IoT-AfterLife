@@ -47,6 +47,7 @@ extension SharedToyBox:ToyBoxListener{
     
     func toyBox(_ toyBox: ToyBox, discovered descriptor: ToyDescriptor) {
         print("discovered \(descriptor.name)")
+        print("id \(descriptor.identifier)")
         
         if bolts.count >= boltsNames.count {
             box.stopScan()

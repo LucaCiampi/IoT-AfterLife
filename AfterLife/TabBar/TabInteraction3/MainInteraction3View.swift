@@ -144,12 +144,15 @@ struct MainInteraction3View: View {
     }
     
     func RetrieveCompatibleAndUncompatibleSpherosId() {
+        print("RetrieveCompatibleAndUncompatibleSpherosId")
         for i in 0...(SharedToyBox.instance.bolts.count - 1) {
             if (SharedToyBox.instance.bolts[i].bloodGroup == "a") {
                 compatibleSpheroId = i
+                print("compatibleSpheroId = " + String(i))
             }
             else if (SharedToyBox.instance.bolts[i].bloodGroup == "o") {
                 uncompatibleSpheroId = i
+                print("uncompatibleSpheroId = " + String(i))
             }
         }
     }
