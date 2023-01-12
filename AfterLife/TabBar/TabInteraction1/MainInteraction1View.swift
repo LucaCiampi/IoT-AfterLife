@@ -219,9 +219,11 @@ struct MainInteraction1View: View {
                     }.padding()
                 }
             }
-            Button("Turn leds off") {
-                bleInterface.sendMessageToVerresESP32(message: "off")
-            }.padding()
+            if (isConnectedToEsp) {
+                Button("Turn leds off") {
+                    bleInterface.sendMessageToVerresESP32(message: "off")
+                }.padding()
+            }
         }
     }
     
@@ -268,7 +270,7 @@ struct MainInteraction1View: View {
         
         for i in 0...(spherosInteraction1.count - 1) {
             // Waits 1 seconds before calling + "i" seconds based on index
-            DispatchQueue.main.asyncAfter(deadline: .now() + Double(7 + i)) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + Double(20 + i)) {
                 SharedToyBox.instance.bolts[i].sensorControl.disable()
                 print("checking if sphero clashed #"+String(i))
                 checkIfSpheroHasClashed(bolt: SharedToyBox.instance.bolts[i]) {

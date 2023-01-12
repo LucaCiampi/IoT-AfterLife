@@ -17,6 +17,7 @@ struct MainInteraction5View: View {
     @State var isShowingDetailView = false
     
     @State var pokerSoundStatus = ""
+    @State var isPokerSoundPlaying = false
     @State var pokerEsp32ReceivedMessage = ""
     
     @State var player: AVAudioPlayer?
@@ -52,14 +53,15 @@ struct MainInteraction5View: View {
                     }
                 }
                 else {
-                    Button("Make poker game sound") {
-                        makePokerGameSound()
-                    }.onAppear {
+                    Text("Ready").onAppear {
                         bleInterface.listenForPokerEsp32()
                     }
                     Text(pokerSoundStatus)
                     Text(pokerEsp32ReceivedMessage)
                 }
+                Button("Make poker game sound") {
+                    makePokerGameSound()
+                }.padding()
             }.padding()
         }.onChange(of: bleInterface.connectionState, perform: { newValue in
             switch newValue {
@@ -107,8 +109,14 @@ struct MainInteraction5View: View {
 
             guard let player = player else { return }
 
-            player.play()
-            print("giant_bell just played")
+            if (!isPokerSoundPlaying) {
+                isPokerSoundPlaying = true
+                player.play()
+                print("giant_bell just played")
+                DispatchQueue.main.asyncAfter(deadline: .now() + 6) {
+                    isPokerSoundPlaying = false
+                }
+            }
 
         } catch let error {
             print(error.localizedDescription)
