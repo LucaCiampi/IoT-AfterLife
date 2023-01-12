@@ -71,39 +71,39 @@ struct MainInteraction3View: View {
                     }
                 })
                 /*
-                VStack {
-                    Text(spheroConnectionString)
-                    Button("Connect to spheros") {
-                        SharedToyBox.instance.searchForBoltsNamed([spheroInteraction3Name, incompatibleSpheroInteraction3Name]) { err in
-                            if err == nil {
-                                self.spheroConnectionString = "Connected to spheros"
-                                isConnectedToSphero = true
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                                    ActivateSpheroSensors(boltId: 0)
-                                    ActivateSpheroSensors(boltId: 1)
-                                }
-                            }
-                        }
-                    }
-                }
-                */
+                 VStack {
+                 Text(spheroConnectionString)
+                 Button("Connect to spheros") {
+                 SharedToyBox.instance.searchForBoltsNamed([spheroInteraction3Name, incompatibleSpheroInteraction3Name]) { err in
+                 if err == nil {
+                 self.spheroConnectionString = "Connected to spheros"
+                 isConnectedToSphero = true
+                 DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                 ActivateSpheroSensors(boltId: 0)
+                 ActivateSpheroSensors(boltId: 1)
+                 }
+                 }
+                 }
+                 }
+                 }
+                 */
             }.padding()
             
             VStack {
                 HStack {
                     Button("Spin compatible") {
-                        MakeSpheroSpin(boltId: 0)
+                        MakeCompatibleSpheroSpin()
                     }.padding()
                     Button("Stop compatible") {
-                        StopSphero(boltId: 0)
+                        StopCompatibleSphero()
                     }
                 }
                 HStack {
                     Button("Spin uncompatible") {
-                        MakeSpheroSpin(boltId: 1)
+                        MakeUncompatibleSpheroSpin()
                     }.padding()
                     Button("Stop uncompatible") {
-                        StopSphero(boltId: 1)
+                        StopUncompatibleSphero()
                     }
                 }
             }
@@ -113,23 +113,21 @@ struct MainInteraction3View: View {
                     Text(bleInterface.cuveDataReceived.last?.content ?? "silence")
                 }.onAppear {
                     bleInterface.listenForCuveEsp32()
-                }.onChange(of: bleInterface.cuveDataReceived.last?.content) { newValue in
-                    if (newValue == "spin") {
-                        compatibleSpheroSpinning = !compatibleSpheroSpinning
-                        if (compatibleSpheroSpinning) {
-                            MakeSpheroSpin(boltId: 0)
+                }.onChange(of: bleInterface.cuveDataReceived.last) { newValue in
+                    if (newValue?.content == "spin") {
+                        if (!compatibleSpheroSpinning) {
+                            MakeCompatibleSpheroSpin()
                         }
                         else {
-                            StopSphero(boltId: 0)
+                            StopCompatibleSphero()
                         }
                     }
-                    else if (newValue == "pump") {
-                        uncompatibleSpheroSpinning = !uncompatibleSpheroSpinning
-                        if (uncompatibleSpheroSpinning) {
-                            MakeSpheroSpin(boltId: 1)
+                    else if (newValue?.content == "pump") {
+                        if (!uncompatibleSpheroSpinning) {
+                            MakeUncompatibleSpheroSpin()
                         }
                         else {
-                            StopSphero(boltId: 1)
+                            StopUncompatibleSphero()
                         }
                     }
                     else {
@@ -152,17 +150,45 @@ struct MainInteraction3View: View {
     }
     
     /**
-     Makes the sphero bolt rotate when placed in the pot
+     Makes the compatible sphero bolt rotate when placed in the pot
      */
-    func MakeSpheroSpin(boltId: Int) {
-        SharedToyBox.instance.bolts[boltId].sendTurnCommand()
+    func MakeCompatibleSpheroSpin() {
+        SharedToyBox.instance.bolts[0].sendTurnCommand()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            compatibleSpheroSpinning = true
+        }
     }
     
     /**
-     Stops sphero movement
+     Stops compatible sphero movement
      */
-    func StopSphero(boltId: Int) {
-        SharedToyBox.instance.bolts[boltId].stopTurnCommand()
+    func StopCompatibleSphero() {
+        print("StopCompatibleSphero")
+        SharedToyBox.instance.bolts[0].stopTurnCommand()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            compatibleSpheroSpinning = false
+        }
+    }
+    
+    /**
+     Makes the uncompatible sphero bolt rotate when placed in the pot
+     */
+    func MakeUncompatibleSpheroSpin() {
+        SharedToyBox.instance.bolts[1].sendTurnCommand()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            uncompatibleSpheroSpinning = true
+        }
+    }
+    
+    /**
+     Stops uncompatible sphero movement
+     */
+    func StopUncompatibleSphero() {
+        print("StopUncompatibleSphero")
+        SharedToyBox.instance.bolts[1].stopTurnCommand()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            uncompatibleSpheroSpinning = false
+        }
     }
 }
 

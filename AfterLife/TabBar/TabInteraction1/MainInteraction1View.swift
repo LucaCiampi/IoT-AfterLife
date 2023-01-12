@@ -36,9 +36,9 @@ struct MainInteraction1View: View {
     @State var spheroConnectionString = "No sphero connected"
     
     let spherosInteraction1 = [
+        SpheroInteraction1Struct(name: "SB-0994", bloodGroup: "a"), // compatible
+        SpheroInteraction1Struct(name: "SB-42C1", bloodGroup: "o"), // incompatible
         SpheroInteraction1Struct(name: "SB-5D1C", bloodGroup: "b"),
-        SpheroInteraction1Struct(name: "SB-42C1", bloodGroup: "o"),
-        SpheroInteraction1Struct(name: "SB-0994", bloodGroup: "a"),
         SpheroInteraction1Struct(name: "SB-F682", bloodGroup: "ab")
     ]
     
@@ -217,11 +217,11 @@ struct MainInteraction1View: View {
                     Button("Turn spheros off") {
                         spherosOff()
                     }.padding()
-                    Button("Turn leds off") {
-                        bleInterface.sendMessageToVerresESP32(message: "off")
-                    }.padding()
                 }
             }
+            Button("Turn leds off") {
+                bleInterface.sendMessageToVerresESP32(message: "off")
+            }.padding()
         }
     }
     
@@ -296,6 +296,7 @@ struct MainInteraction1View: View {
             bolt.sensorControl.enable(sensors: SensorMask.init(arrayLiteral: .gyro))
             bolt.sensorControl.interval = 1
             bolt.setStabilization(state: SetStabilization.State.off)
+            print(bolt.batteryLevel)
             
             bolt.sensorControl.onDataReady = { data in
                 DispatchQueue.main.async {
