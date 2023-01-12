@@ -298,7 +298,7 @@ struct MainInteraction1View: View {
             bolt.sensorControl.enable(sensors: SensorMask.init(arrayLiteral: .gyro))
             bolt.sensorControl.interval = 1
             bolt.setStabilization(state: SetStabilization.State.off)
-            print(bolt.batteryLevel)
+            print(bolt.batteryLevel ?? "no battery level")
             
             bolt.sensorControl.onDataReady = { data in
                 DispatchQueue.main.async {

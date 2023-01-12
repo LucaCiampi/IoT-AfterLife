@@ -72,8 +72,13 @@ class SpheroV2ToyCore: NSObject, CBPeripheralDelegate {
     }
     
     func send(_ command: CommandV2) {
-        let commandOperation = CommandOperationV2(command, toyCore: self, commandSequencer: commandSequencer, characteristic: commandsCharacteristic)
-        commandQueue.addOperation(commandOperation)
+        if (self.commandsCharacteristic != nil) {
+            let commandOperation = CommandOperationV2(command, toyCore: self, commandSequencer: commandSequencer, characteristic: commandsCharacteristic)
+            commandQueue.addOperation(commandOperation)
+        }
+        else {
+            print("error sending message sphero")
+        }
     }
     
     func writeValue(_ data: Data, for characteristic: CBCharacteristic, type: CBCharacteristicWriteType) {
