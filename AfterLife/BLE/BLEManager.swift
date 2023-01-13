@@ -26,12 +26,16 @@ class BLEManager: NSObject {
     let pokerBisWriteCBUUID = CBUUID(string: "19BF94C5-3219-4433-967C-CB29CBF2B173")
     let pokerBisReadCBUUID = CBUUID(string: "F4C8EE2A-8686-46C1-8CD3-06C263BFEB7D")
     
+    let pokerLedsAuthCBUUID = CBUUID(string: "0148FDFD-3A5D-410C-BB24-34783916BEE8")
+    let pokerLedsWriteCBUUID = CBUUID(string: "F11A396C-18A4-40C6-B16E-962E8777D3DF")
+    let pokerLedsReadCBUUID = CBUUID(string: "7A75D784-9550-42A6-881F-46C1A048A54A")
+    
     var messageReceivedCallback: ((Data?)->())?
     var messageReceivedCallbackCuveEsp32: ((Data?)->())?
     var messageReceivedCallbackPokerEsp32: ((Data?)->())?
     
     var sendDataCallback: ((String?) -> ())?
-    var sendDataCallbackPokerEsp32: ((String?) -> ())?
+    var sendDataCallbackPokerLedsEsp32: ((String?) -> ())?
     var sendDataCallbackVerresEsp32: ((String?) -> ())?
     
     var centralManager: CBCentralManager?
@@ -135,10 +139,10 @@ class BLEManager: NSObject {
     /**
      Interaction 5 sending messages
      */
-    func sendDataToPokerESP(data: Data, callback: @escaping (String?) -> ()) {
-        sendDataCallbackPokerEsp32 = callback
+    func sendDataToPokerLedsESP(data: Data, callback: @escaping (String?) -> ()) {
+        sendDataCallbackPokerLedsEsp32 = callback
         for periph in readyPeripherals {
-            if let char = BLEManager.instance.getCharForUUID(pokerWriteCBUUID, forperipheral: periph) {
+            if let char = BLEManager.instance.getCharForUUID(pokerLedsWriteCBUUID, forperipheral: periph) {
                 periph.writeValue(data, for: char, type: CBCharacteristicWriteType.withResponse)
             }
         }
@@ -239,16 +243,12 @@ extension BLEManager: CBCentralManagerDelegate {
     }
     
     func peripheral(_ peripheral: CBPeripheral, didWriteValueFor characteristic: CBCharacteristic, error: Error?) {
-        if characteristic == getCharForUUID(pokerWriteCBUUID, forperipheral: peripheral) {
-            print("Message sent to poker ESP32")
-            sendDataCallbackPokerEsp32?(peripheral.name)
-        }
-        else if characteristic == getCharForUUID(pokerBisWriteCBUUID, forperipheral: peripheral) {
-            print("Message sent to poker ESP32 bis")
-            sendDataCallbackPokerEsp32?(peripheral.name)
+        if characteristic == getCharForUUID(pokerLedsWriteCBUUID, forperipheral: peripheral) {
+            //print("Message sent to poker leds ESP32")
+            sendDataCallbackPokerLedsEsp32?(peripheral.name)
         }
         else if characteristic == getCharForUUID(verresWriteCBUUID, forperipheral: peripheral) {
-            print("Message sent to verres ESP32")
+            //print("Message sent to verres ESP32")
             sendDataCallbackVerresEsp32?(peripheral.name)
         }
         else {

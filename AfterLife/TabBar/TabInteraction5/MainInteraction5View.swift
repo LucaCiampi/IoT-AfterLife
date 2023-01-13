@@ -22,6 +22,10 @@ struct MainInteraction5View: View {
     
     @State var player: AVAudioPlayer?
     
+    @State var questionNumber = 0
+    let numberOfQuestions = 3
+    let goodAnswers = [1, 4, 3]
+    
     var body: some View {
         VStack {
             // ESP32
@@ -51,6 +55,7 @@ struct MainInteraction5View: View {
                     }
                 }
                 else {
+                    Text("Question #" + String(questionNumber + 1))
                     Text("Ready").onAppear {
                         bleInterface.listenForPokerEsp32()
                     }
@@ -65,6 +70,22 @@ struct MainInteraction5View: View {
                     makePokerGameSound()
                 }
                 .padding()
+                HStack {
+                    Button("question +1") {
+                        questionNumber += 1
+                    }
+                    Button("question -1") {
+                        questionNumber -= 1
+                    }
+                }
+                HStack {
+                    Button("green") {
+                        bleInterface.sendMessageToPokerLedsESP32(message: "green")
+                    }
+                    Button("red") {
+                        bleInterface.sendMessageToPokerLedsESP32(message: "red")
+                    }
+                }
             }.padding()
         }.onChange(of: bleInterface.connectionState, perform: { newValue in
             switch newValue {
@@ -91,8 +112,9 @@ struct MainInteraction5View: View {
                 connectionString = "No ESP32 connected"
             }
         }).onChange(of: bleInterface.pokerDataReceived, perform: { newValue in
-            pokerEsp32ReceivedMessage = (bleInterface.pokerDataReceived.last?.content ?? "nothing") + " just badged !"
+            pokerEsp32ReceivedMessage = (newValue.last?.content ?? "nothing") + " just badged !"
             makePokerGameSound()
+            checkBadgedAnswer(answer: newValue.last?.content)
         })
         .padding()
     }
@@ -117,12 +139,35 @@ struct MainInteraction5View: View {
                 isPokerSoundPlaying = true
                 player.play()
                 print("giant_bell just played")
-                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 6) {
                     isPokerSoundPlaying = false
                 }
             }
         } catch let error {
             print(error.localizedDescription)
+        }
+    }
+    
+    func checkBadgedAnswer(answer: String?) {
+        if let answer = answer {
+            let answerSplitted = answer.components(separatedBy: "-")
+            print(answerSplitted[0])
+            if (answerSplitted[0].contains(String(goodAnswers[questionNumber]))) {
+                print("Good answer")
+                bleInterface.sendMessageToPokerLedsESP32(message: "green")
+            }
+            else {
+                print("Wrong answer")
+                bleInterface.sendMessageToPokerLedsESP32(message: "red")
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 6) {
+                if (questionNumber < numberOfQuestions - 1) {
+                    questionNumber += 1
+                }
+            }
+        }
+        else {
+            print("(checkBadgedAnswer) - Erreur lecture réponse badge")
         }
     }
 }

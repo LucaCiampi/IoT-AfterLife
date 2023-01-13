@@ -314,7 +314,8 @@ struct MainInteraction1View: View {
     func checkIfSpheroHasRotated(bolt: BoltToy?, onRotation: @escaping (() -> ())) {
         print("checkIfSpheroHasRotated")
         if let bolt = bolt {
-            
+            print("Sphero rotated:")
+            print(bolt.identifier)
             bolt.sensorControl.enable(sensors: SensorMask.init(arrayLiteral: .gyro))
             bolt.sensorControl.interval = 1
             bolt.setStabilization(state: SetStabilization.State.off)
@@ -332,7 +333,8 @@ struct MainInteraction1View: View {
                                 self.spherosThatRotated.append(bolt.identifier)
                                 onRotation()
                             }
-                            return
+                            //return
+                            bolt.sensorControl.onDataReady = nil
                         }
                     }
                 }
@@ -364,7 +366,7 @@ struct MainInteraction1View: View {
                                 self.spherosThatClashed.append(bolt.identifier)
                                 onClash()
                             }
-                            return
+                            //return
                         }
                     }
                 }

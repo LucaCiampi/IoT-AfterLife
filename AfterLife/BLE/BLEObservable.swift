@@ -204,12 +204,26 @@ class BLEObservable: ObservableObject {
     }
     
     /**
-     Connects to the second ESP32 managing the interaction 5 which is the poker game
+     Connects to the second ESP32 bis managing the interaction 5 which is the poker game
      */
     func connectToInteraction5Esp32Bis() {
         BLEManager.instance.scan { p, pname in
             let periph = Periph(blePeriph: p, name: pname)
             if periph.name == "rfid-poker-2" {
+                self.connectToMultiple(p: periph) {
+                    self.connectToInteraction5Esp32Leds()
+                }
+            }
+        }
+    }
+    
+    /**
+     Connects to the second ESP32 managing the interaction 5 leds which is the poker game
+     */
+    func connectToInteraction5Esp32Leds() {
+        BLEManager.instance.scan { p, pname in
+            let periph = Periph(blePeriph: p, name: pname)
+            if periph.name == "rfid-poker-leds" {
                 self.connectTo(p: periph)
             }
         }
@@ -249,11 +263,11 @@ class BLEObservable: ObservableObject {
     /**
      Sends a message to the poker ESP32
      */
-    func sendMessageToPokerESP32(message: String) {
+    func sendMessageToPokerLedsESP32(message: String) {
         if let messageToSend: Data = message.data(using: .utf8) {
-            print("Sent : " + message + " to poker esp32")
+            print("Sent : " + message + " to poker leds esp32")
             //self.appendToHistory(text: "Sent : " + message)
-            BLEManager.instance.sendDataToPokerESP(data: messageToSend) { returnMessage in
+            BLEManager.instance.sendDataToPokerLedsESP(data: messageToSend) { returnMessage in
                 print(returnMessage ?? "no return message")
             }
         }
