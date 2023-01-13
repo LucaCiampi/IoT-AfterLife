@@ -30,13 +30,15 @@ struct MainInteraction5View: View {
         VStack {
             // ESP32
             VStack {
-                Text(connectionString)
+                Text(connectionString).onChange(of: bleInterface.allPokerEspsConnected) { newValue in
+                    connectionString = "All ESPs connected"
+                }
                 if bleInterface.connectedPeripheral != nil {
                     Button("Disconnect") {
                         bleInterface.disconnectFrom(p: bleInterface.connectedPeripheral!)
                     }
                 }
-                if (!isShowingDetailView) {
+                if (!bleInterface.allPokerEspsConnected) {
                     HStack {
                         Button(scanButtonString) {
                             isScanningDevices = !isScanningDevices
@@ -55,12 +57,14 @@ struct MainInteraction5View: View {
                     }
                 }
                 else {
-                    Text("Question #" + String(questionNumber + 1))
-                    Text("Ready").onAppear {
-                        bleInterface.listenForPokerEsp32()
-                    }
-                    Text(pokerSoundStatus)
-                    Text(pokerEsp32ReceivedMessage)
+                    VStack {
+                        Text("Question #" + String(questionNumber + 1))
+                        Text("Ready").onAppear {
+                            bleInterface.listenForPokerEsp32()
+                        }
+                        Text(pokerSoundStatus)
+                        Text(pokerEsp32ReceivedMessage)
+                    }.padding()
                 }
             }
             
@@ -101,7 +105,6 @@ struct MainInteraction5View: View {
                 break
             case .ready:
                 connectionString = "Connected to " + connectionString
-                isShowingDetailView = true
                 break
             }
         }).onChange(of: bleInterface.connectedPeripheral, perform: { newValue in

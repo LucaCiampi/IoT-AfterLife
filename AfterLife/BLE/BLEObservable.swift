@@ -41,6 +41,7 @@ class BLEObservable: ObservableObject {
     @Published var djiButtonPressed: Bool = false
     
     // Interaction 5
+    @Published var allPokerEspsConnected = false
     @Published var pokerDataReceived: [DataReceived] = []
     
     
@@ -83,7 +84,7 @@ class BLEObservable: ObservableObject {
         }
     }
     
-    func connectToMultiple(p: Periph, callback: @escaping () -> ()) {
+    func connectToWithCallback(p: Periph, callback: @escaping () -> ()) {
         self.connectionState = .connecting
         
         BLEManager.instance.connectPeripheral(p.blePeriph) { cbPeriph in
@@ -196,7 +197,7 @@ class BLEObservable: ObservableObject {
         BLEManager.instance.scan { p, pname in
             let periph = Periph(blePeriph: p, name: pname)
             if periph.name == "rfid-poker-1" {
-                self.connectToMultiple(p: periph) {
+                self.connectToWithCallback(p: periph) {
                     self.connectToInteraction5Esp32Bis()
                 }
             }
@@ -210,7 +211,7 @@ class BLEObservable: ObservableObject {
         BLEManager.instance.scan { p, pname in
             let periph = Periph(blePeriph: p, name: pname)
             if periph.name == "rfid-poker-2" {
-                self.connectToMultiple(p: periph) {
+                self.connectToWithCallback(p: periph) {
                     self.connectToInteraction5Esp32Leds()
                 }
             }
@@ -224,7 +225,9 @@ class BLEObservable: ObservableObject {
         BLEManager.instance.scan { p, pname in
             let periph = Periph(blePeriph: p, name: pname)
             if periph.name == "rfid-poker-leds" {
-                self.connectTo(p: periph)
+                self.connectToWithCallback(p: periph) {
+                    self.allPokerEspsConnected = true
+                }
             }
         }
     }
