@@ -16,6 +16,7 @@ struct MainInteraction3View: View {
     @State var isScanningDevices = false
     @State var isShowingDetailView = false
     
+    @State var isCurrentlyIncompatibleSphero = false
     @State var compatibleSpheroSpinning = false
     @State var uncompatibleSpheroSpinning = false
     
@@ -102,6 +103,12 @@ struct MainInteraction3View: View {
                     }
                 }
                 HStack {
+                    Text(isCurrentlyIncompatibleSphero ? "incompatible en cours" : "compatible en cours").padding()
+                    Button("Switch excepted sphero") {
+                        isCurrentlyIncompatibleSphero = !isCurrentlyIncompatibleSphero
+                    }
+                }
+                HStack {
                     Button("Spin uncompatible") {
                         MakeUncompatibleSpheroSpin()
                     }.padding()
@@ -118,20 +125,23 @@ struct MainInteraction3View: View {
                     RetrieveCompatibleAndUncompatibleSpherosId()
                     bleInterface.listenForCuveEsp32()
                 }.onChange(of: bleInterface.cuveDataReceived.last) { newValue in
-                    if (newValue?.content == "spin") {
+                    if (newValue?.content == "spin" && !isCurrentlyIncompatibleSphero) {
                         if (!compatibleSpheroSpinning) {
                             MakeCompatibleSpheroSpin()
                         }
                         else {
                             StopCompatibleSphero()
+                            isCurrentlyIncompatibleSphero = true
                         }
                     }
-                    else if (newValue?.content == "pump") {
+                    //else if (newValue?.content == "pump") {
+                    else if (newValue?.content == "spin" && isCurrentlyIncompatibleSphero) {
                         if (!uncompatibleSpheroSpinning) {
                             MakeUncompatibleSpheroSpin()
                         }
                         else {
                             StopUncompatibleSphero()
+                            isCurrentlyIncompatibleSphero = false
                         }
                     }
                     else {
