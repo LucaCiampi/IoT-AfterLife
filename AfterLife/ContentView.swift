@@ -14,6 +14,7 @@ struct ContentView: View {
     
     @State var showModal = false
     @State var startVideo = false
+    @State var startMicroscopeVideo = false
     
     var body: some View {
         ZStack {
@@ -21,7 +22,7 @@ struct ContentView: View {
                 MainInteraction1View().tabItem {
                     Label("Verres", systemImage: "wineglass")
                 }
-                MainInteraction2View(showModal: $showModal, startVideo: $startVideo).tabItem {
+                MainInteraction2View(showModal: $showModal, startVideo: $startVideo, startMicroscopeVideo: $startMicroscopeVideo).tabItem {
                     Label("Analyse", systemImage: "faxmachine")
                 }
                 MainInteraction3View().tabItem {
@@ -44,6 +45,7 @@ struct ContentView: View {
     // Full screen modal video for interaction 2
     let player = AVPlayer()
     let videoUrl = Bundle.main.url(forResource: "test", withExtension: "mp4")!
+    let microscopeVideoUrl = Bundle.main.url(forResource: "microscope", withExtension: "mp4")!
     
     var modalVideo: some View {
         VideoPlayer(player: player)
@@ -54,7 +56,16 @@ struct ContentView: View {
                 }
                 player.preventsDisplaySleepDuringVideoPlayback = true
             }
+            // First video of glasses filling
             .onChange(of: startVideo, perform: { newValue in
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
+                    player.play()
+                })
+            })
+            // Second video of microscope items
+            .onChange(of: startMicroscopeVideo, perform: { newValue in
+                let item = AVPlayerItem(url: microscopeVideoUrl)
+                player.replaceCurrentItem(with: item)
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
                     player.play()
                 })

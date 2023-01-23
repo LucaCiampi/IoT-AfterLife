@@ -14,6 +14,7 @@ struct MainInteraction2View: View {
     @EnvironmentObject var bleInterface: BLEObservable
     @Binding public var showModal: Bool
     @Binding public var startVideo: Bool
+    @Binding public var startMicroscopeVideo: Bool
     
     @State var connectionString = "No sphero connected"
     @State var isScanningDevices = false
@@ -22,6 +23,8 @@ struct MainInteraction2View: View {
     let spheroInteraction2Name = "SB-2020"
     
     @State var spheroHasMoved = false
+    @State var leverTimeEnded = false
+    @State var leverBackToPosition = false
     
     var body: some View {
         VStack {
@@ -53,6 +56,9 @@ struct MainInteraction2View: View {
         .padding()
     }
     
+    /**
+     Retrieves movement of the lever sphero
+     */
     func retrieveSpheroMovements(boltId: Int) {
         SharedToyBox.instance.bolts[boltId].sensorControl.enable(sensors: SensorMask.init(arrayLiteral: .accelerometer,.gyro))
         SharedToyBox.instance.bolts[boltId].sensorControl.interval = 1
@@ -65,11 +71,11 @@ struct MainInteraction2View: View {
                     // checks secousse
                     let absSum = abs(acceleration.x!)+abs(acceleration.y!)+abs(acceleration.z!)
                     
-                    if absSum > 1.7 {
+                    if absSum > 1.2 {
                         print("Lever activated")
-                        spheroHasMoved = true
+                        leverHasMoved()
                         // v ?
-                        SharedToyBox.instance.bolts[boltId].sensorControl.disable()
+                        
                     }
                 }
                 /*
@@ -80,5 +86,30 @@ struct MainInteraction2View: View {
                  */
             }
         }
+    }
+    
+    /**
+     Assigns action corresponding to the video playing
+     */
+    func leverHasMoved() {
+        spheroHasMoved = true;
+        if (!leverTimeEnded) {
+            // Plays video glasses filling
+            DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
+                leverTimeEnded = true
+            }
+        }
+        else if (leverTimeEnded && !leverBackToPosition) {
+            // Stops filling glasses and displays microscope vision
+            leverBackToPosition = true
+            playSecondVideo()
+        }
+    }
+    
+    /**
+     Plays the video of the microscope
+     */
+    func playSecondVideo() {
+        startMicroscopeVideo = true
     }
 }
