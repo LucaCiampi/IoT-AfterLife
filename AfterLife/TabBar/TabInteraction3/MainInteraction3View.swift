@@ -125,7 +125,8 @@ struct MainInteraction3View: View {
                     RetrieveCompatibleAndUncompatibleSpherosId()
                     bleInterface.listenForCuveEsp32()
                 }.onChange(of: bleInterface.cuveDataReceived.last) { newValue in
-                    if (newValue?.content == "spin" && !isCurrentlyIncompatibleSphero) {
+                    //if (newValue?.content == "spin" && !isCurrentlyIncompatibleSphero) {
+                    if (newValue?.content == "spin") {
                         if (!compatibleSpheroSpinning) {
                             MakeCompatibleSpheroSpin()
                         }
@@ -134,8 +135,8 @@ struct MainInteraction3View: View {
                             isCurrentlyIncompatibleSphero = true
                         }
                     }
-                    //else if (newValue?.content == "pump") {
-                    else if (newValue?.content == "spin" && isCurrentlyIncompatibleSphero) {
+                    else if (newValue?.content == "pump") {
+                    //else if (newValue?.content == "spin" && isCurrentlyIncompatibleSphero) {
                         if (!uncompatibleSpheroSpinning) {
                             MakeUncompatibleSpheroSpin()
                         }

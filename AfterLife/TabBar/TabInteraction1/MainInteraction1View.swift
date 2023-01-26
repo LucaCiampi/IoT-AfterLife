@@ -59,16 +59,7 @@ struct MainInteraction1View: View {
                 Button(!isConnectedToSpheros ? "Connect to spheros" : "Disconnect from spheros") {
                     if (!isConnectedToSpheros) {
                         print("Connection to spheros")
-                        SharedToyBox.instance.searchForBoltsNamed(getAllSpherosToConnectTo()) { err in
-                            if err == nil {
-                                self.spheroConnectionString = "Connected to " + String(spherosInteraction1.count) + " spheros"
-                                isConnectedToSpheros = true
-                                assignEachSpheroToData()
-                            }
-                            else {
-                                print("erreur connexion spheros")
-                            }
-                        }
+                        connectToSpheros()
                     }
                     else {
                         SharedToyBox.instance.bolts.forEach { bolt in
@@ -240,6 +231,35 @@ struct MainInteraction1View: View {
         }
         
         return returnArray
+    }
+    
+    /**
+     Connects to required spheros
+     */
+    func connectToSpheros() {
+        SharedToyBox.instance.searchForBoltsNamed(getAllSpherosToConnectTo()) { err in
+            if err == nil {
+                self.spheroConnectionString = "Connected to " + String(spherosInteraction1.count) + " spheros"
+                isConnectedToSpheros = true
+                initSpheros()
+            }
+            else {
+                print("erreur connexion spheros")
+            }
+        }
+    }
+    
+    /**
+     Inits the spheros to check if everythings works properly
+     */
+    func initSpheros() {
+        if (SharedToyBox.instance.bolts.count == getAllSpherosToConnectTo().count) {
+            assignEachSpheroToData()
+        }
+        else {
+            connectToSpheros()
+            print("Erreur dans initSpheros")
+        }
     }
     
     /**
