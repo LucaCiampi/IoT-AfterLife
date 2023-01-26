@@ -55,14 +55,21 @@ struct ContentView: View {
                     player.replaceCurrentItem(with: item)
                 }
                 player.preventsDisplaySleepDuringVideoPlayback = true
+                
+                // loops video
+                NotificationCenter.default.addObserver(forName: .AVPlayerItemDidPlayToEndTime, object: nil, queue: .main) { _ in
+                    player.seek(to: .zero)
+                    player.play()
+                }
             }
-            // First video of glasses filling
+        // First video of glasses filling
             .onChange(of: startVideo, perform: { newValue in
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
+                player.actionAtItemEnd = .none
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0, execute: {
                     player.play()
                 })
             })
-            // Second video of microscope items
+        // Second video of microscope items
             .onChange(of: startMicroscopeVideo, perform: { newValue in
                 let item = AVPlayerItem(url: microscopeVideoUrl)
                 player.replaceCurrentItem(with: item)

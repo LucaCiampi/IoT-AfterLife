@@ -20,7 +20,8 @@ struct MainInteraction2View: View {
     @State var isScanningDevices = false
     @State var isShowingDetailView = false
     
-    let spheroInteraction2Name = "SB-2020"
+    //let spheroInteraction2Name = "SB-2020"
+    let spheroInteraction2Name = "SB-F682"
     
     @State var spheroHasMoved = false
     @State var leverTimeEnded = false
@@ -71,19 +72,11 @@ struct MainInteraction2View: View {
                     // checks secousse
                     let absSum = abs(acceleration.x!)+abs(acceleration.y!)+abs(acceleration.z!)
                     
-                    if absSum > 1.2 {
-                        print("Lever activated")
+                    if absSum > 1.7 {
+                        print("absSum > 1.7")
                         leverHasMoved()
-                        // v ?
-                        
                     }
                 }
-                /*
-                 if let gyro = data.gyro?.rotationRate {
-                 // TOUJOURS PAS BIEN!!!
-                 let rotationRate: double3 = [Double(gyro.x!)/2000.0, Double(gyro.y!)/2000.0, Double(gyro.z!)/2000.0]
-                 }
-                 */
             }
         }
     }
@@ -95,12 +88,14 @@ struct MainInteraction2View: View {
         spheroHasMoved = true;
         if (!leverTimeEnded) {
             // Plays video glasses filling
+            print("Plays video glasses filling")
             DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
                 leverTimeEnded = true
             }
         }
         else if (leverTimeEnded && !leverBackToPosition) {
             // Stops filling glasses and displays microscope vision
+            print("Stops filling glasses and displays microscope vision")
             leverBackToPosition = true
             playSecondVideo()
         }
