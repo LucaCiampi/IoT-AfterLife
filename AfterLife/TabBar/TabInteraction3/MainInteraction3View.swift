@@ -191,6 +191,9 @@ struct MainInteraction3View: View {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             compatibleSpheroSpinning = true
         }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+            StopCompatibleSphero()
+        }
     }
     
     /**
@@ -214,6 +217,9 @@ struct MainInteraction3View: View {
         SharedToyBox.instance.bolts[uncompatibleSpheroId].sendTurnCommand()
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             uncompatibleSpheroSpinning = true
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 8) {
+            StopUncompatibleSphero()
         }
     }
     

@@ -10,7 +10,6 @@
 		B0356136291A5B9800EEA0F3 /* MainInteraction2View.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0356135291A5B9800EEA0F3 /* MainInteraction2View.swift */; };
 		B082BAED2951E1DF00FB9701 /* MainInteraction4View.swift in Sources */ = {isa = PBXBuildFile; fileRef = B082BAEC2951E1DF00FB9701 /* MainInteraction4View.swift */; };
 		B082BAEF2951E1EB00FB9701 /* MainInteraction5View.swift in Sources */ = {isa = PBXBuildFile; fileRef = B082BAEE2951E1EB00FB9701 /* MainInteraction5View.swift */; };
-		B0A450062965F427000B9858 /* test.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = B0A450052965F427000B9858 /* test.mp4 */; };
 		B0D073B32951F2D10036B338 /* GraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D073792951F2D00036B338 /* GraphView.swift */; };
 		B0D073B42951F2D10036B338 /* CGContext+GraphLines.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D0737A2951F2D00036B338 /* CGContext+GraphLines.swift */; };
 		B0D073B52951F2D10036B338 /* GraphSegment.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D0737B2951F2D00036B338 /* GraphSegment.swift */; };
@@ -52,7 +51,8 @@
 		B0D073D92951F2D10036B338 /* Double+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D073AA2951F2D00036B338 /* Double+Utils.swift */; };
 		B0D073DA2951F2D10036B338 /* String+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D073AB2951F2D00036B338 /* String+Utils.swift */; };
 		B0D073E2295224B40036B338 /* giant_bell.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B0D073E1295224B40036B338 /* giant_bell.mp3 */; };
-		B0E3EC782982AA4800B2CD76 /* microscope.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = B0E3EC772982AA4800B2CD76 /* microscope.mp4 */; };
+		B0E37B19298A6F0400EB6B71 /* microscope.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = B0E37B17298A6F0400EB6B71 /* microscope.mp4 */; };
+		B0E37B1A298A6F0400EB6B71 /* test.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = B0E37B18298A6F0400EB6B71 /* test.mp4 */; };
 		B0EE0915291A469F00828D11 /* AfterLifeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0EE0914291A469F00828D11 /* AfterLifeApp.swift */; };
 		B0EE0917291A469F00828D11 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0EE0916291A469F00828D11 /* ContentView.swift */; };
 		B0EE0919291A46A000828D11 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B0EE0918291A46A000828D11 /* Assets.xcassets */; };
@@ -221,7 +221,6 @@
 		B0356135291A5B9800EEA0F3 /* MainInteraction2View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainInteraction2View.swift; sourceTree = "<group>"; };
 		B082BAEC2951E1DF00FB9701 /* MainInteraction4View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainInteraction4View.swift; sourceTree = "<group>"; };
 		B082BAEE2951E1EB00FB9701 /* MainInteraction5View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainInteraction5View.swift; sourceTree = "<group>"; };
-		B0A450052965F427000B9858 /* test.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = test.mp4; sourceTree = "<group>"; };
 		B0D073792951F2D00036B338 /* GraphView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphView.swift; sourceTree = "<group>"; };
 		B0D0737A2951F2D00036B338 /* CGContext+GraphLines.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGContext+GraphLines.swift"; sourceTree = "<group>"; };
 		B0D0737B2951F2D00036B338 /* GraphSegment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphSegment.swift; sourceTree = "<group>"; };
@@ -263,7 +262,8 @@
 		B0D073AA2951F2D00036B338 /* Double+Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Double+Utils.swift"; sourceTree = "<group>"; };
 		B0D073AB2951F2D00036B338 /* String+Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Utils.swift"; sourceTree = "<group>"; };
 		B0D073E1295224B40036B338 /* giant_bell.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = giant_bell.mp3; sourceTree = "<group>"; };
-		B0E3EC772982AA4800B2CD76 /* microscope.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = microscope.mp4; sourceTree = "<group>"; };
+		B0E37B17298A6F0400EB6B71 /* microscope.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; name = microscope.mp4; path = ../../../../../../Downloads/microscope.mp4; sourceTree = "<group>"; };
+		B0E37B18298A6F0400EB6B71 /* test.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; name = test.mp4; path = ../../../../../../Downloads/test.mp4; sourceTree = "<group>"; };
 		B0EE0911291A469F00828D11 /* AfterLife.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AfterLife.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B0EE0914291A469F00828D11 /* AfterLifeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AfterLifeApp.swift; sourceTree = "<group>"; };
 		B0EE0916291A469F00828D11 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -466,8 +466,8 @@
 		B0A450032965D048000B9858 /* Videos */ = {
 			isa = PBXGroup;
 			children = (
-				B0A450052965F427000B9858 /* test.mp4 */,
-				B0E3EC772982AA4800B2CD76 /* microscope.mp4 */,
+				B0E37B17298A6F0400EB6B71 /* microscope.mp4 */,
+				B0E37B18298A6F0400EB6B71 /* test.mp4 */,
 			);
 			path = Videos;
 			sourceTree = "<group>";
@@ -1383,11 +1383,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B0E3EC782982AA4800B2CD76 /* microscope.mp4 in Resources */,
 				B0EE091C291A46A000828D11 /* Preview Assets.xcassets in Resources */,
+				B0E37B19298A6F0400EB6B71 /* microscope.mp4 in Resources */,
 				B0EE0919291A46A000828D11 /* Assets.xcassets in Resources */,
+				B0E37B1A298A6F0400EB6B71 /* test.mp4 in Resources */,
 				B0D073E2295224B40036B338 /* giant_bell.mp3 in Resources */,
-				B0A450062965F427000B9858 /* test.mp4 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

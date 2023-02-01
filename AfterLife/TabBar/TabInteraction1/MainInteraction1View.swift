@@ -37,10 +37,10 @@ struct MainInteraction1View: View {
     @State var spheroConnectionString = "No sphero connected"
     
     var spherosInteraction1 = [
-        //SpheroInteraction1Struct(name: "SB-0994", bloodGroup: "a", id: "B0473572-1896-F66C-D9BC-CF194C936465"),// compatible
+        SpheroInteraction1Struct(name: "SB-0994", bloodGroup: "a", id: "B0473572-1896-F66C-D9BC-CF194C936465"),// compatible
         SpheroInteraction1Struct(name: "SB-F682", bloodGroup: "o", id: "77F312D1-479C-820D-1CD0-47E17807D4DB"), // incompatible
         SpheroInteraction1Struct(name: "SB-6C4C", bloodGroup: "ab", id: "3A445653-9A4F-CD21-79CE-CF3D48459C06"),
-        //SpheroInteraction1Struct(name: "SB-5D1C", bloodGroup: "b", id: "2FCD34C8-DBB4-A278-78A3-57EE55317640"),
+        SpheroInteraction1Struct(name: "SB-5D1C", bloodGroup: "b", id: "2FCD34C8-DBB4-A278-78A3-57EE55317640"),
     ]
     
     @State var hasStarted = false

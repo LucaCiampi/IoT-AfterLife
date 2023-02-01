@@ -20,8 +20,7 @@ struct MainInteraction2View: View {
     @State var isScanningDevices = false
     @State var isShowingDetailView = false
     
-    //let spheroInteraction2Name = "SB-2020"
-    let spheroInteraction2Name = "SB-F682"
+    let spheroInteraction2Name = "SB-2020"
     
     @State var spheroHasMoved = false
     @State var leverTimeEnded = false
